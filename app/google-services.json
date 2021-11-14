@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "433535088874",
+    "firebase_url": "https://garanteam-ab412-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    "project_id": "garanteam-ab412",
+    "storage_bucket": "garanteam-ab412.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433535088874:android:f6a196e942ad21e224bf93",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433535088874-a5ddb9etra7li6d915djmm0hiqtlp2c3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDEcLGG3x9jZRSXjRiGUI9u2QyfLI71x8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433535088874-a5ddb9etra7li6d915djmm0hiqtlp2c3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
