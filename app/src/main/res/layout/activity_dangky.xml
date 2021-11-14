@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.IntroActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="411dp"
+        android:layout_height="720dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/background_intro" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="ĐĂNG KÝ TÀI KHOẢN"
+        android:textColor="#3D33A8"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <EditText
+        android:id="@+id/et_dk_sdt"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Số điện thoại"
+        android:inputType="phone"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_hoten" />
+
+    <EditText
+        android:id="@+id/et_dk_hoten"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Họ và Tên"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/et_dk_diachi"
+        android:layout_width="290dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="Địa chỉ"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <EditText
+        android:id="@+id/et_dk_namsinh"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Năm sinh"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintStart_toEndOf="@+id/et_dk_thang"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_email" />
+
+    <EditText
+        android:id="@+id/et_dk_thang"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Tháng"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/et_dk_ngay"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_email" />
+
+    <EditText
+        android:id="@+id/et_dk_ngay"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Ngày"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_dk_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/et_dk_email"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_email" />
+
+    <EditText
+        android:id="@+id/et_dk_password"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Mật khẩu"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_diachi" />
+
+    <EditText
+        android:id="@+id/et_dk_password2"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Nhập lại mật khẩu"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_password" />
+
+    <Button
+        android:id="@+id/btn_dk_dangky"
+        android:layout_width="140dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#C62525"
+        android:text="Đăng ký"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.221"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_password2" />
+
+    <Button
+        android:id="@+id/btn_dk_huy"
+        android:layout_width="140dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#C62525"
+        android:text="Hủy"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.778"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_password2" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="289dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:requiresFadingEdge="horizontal"
+        android:scrollbarAlwaysDrawHorizontalTrack="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_ngay">
+
+        <RadioButton
+            android:id="@+id/rdo_dk_nam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/category_background2"
+            android:text="Nam" />
+
+        <RadioButton
+            android:id="@+id/rdo_dk_nu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/category_background2"
+            android:fadingEdge="vertical"
+            android:text="Nữ" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/et_dk_email"
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/category_background2"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:paddingStart="12dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_dk_sdt" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

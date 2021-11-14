@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listFoodOrder"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginRight="25dp"
+    android:background="@drawable/category_background1">
+
+    <Button
+        android:id="@+id/btn_huydon_order"
+        android:layout_width="200dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#980202"
+        android:text="Hủy đơn hàng"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/food_Name_checkout6"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/Food_date_listorder"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="right|center_vertical"
+        android:text="ngày"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.981"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/food_trangthai_listorder"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="right|center_vertical"
+        android:text="trang thai"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toBottomOf="@+id/textView21"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/food_Name_checkout2"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="left|center_vertical"
+        android:text="Đơn ngày:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/food_Name_checkout6"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="Trạng thái:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toBottomOf="@+id/textView21"
+        app:layout_constraintVertical_bias="0.075" />
+
+    <TextView
+        android:id="@+id/food_Name_checkout4"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="Số lượng:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.091"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toBottomOf="@+id/food_Name_checkout2" />
+
+    <TextView
+        android:id="@+id/food_somon_listorder"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:gravity="right|center_vertical"
+        android:text="SoLuong"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.984"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toBottomOf="@+id/Food_date_listorder" />
+
+    <TextView
+        android:id="@+id/food_Name_Order"
+        android:layout_width="88dp"
+        android:layout_height="21dp"
+        android:gravity="left|center_vertical"
+        android:text="Giá đơn:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.096"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toBottomOf="@+id/food_Name_checkout4" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="230dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/abril_fatface"
+        android:gravity="right|top"
+        android:text="__________________________"
+        android:textColor="#A8A8A8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.92"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toBottomOf="@+id/food_somon_listorder" />
+
+    <TextView
+        android:id="@+id/food_SumPrice_listorder"
+        android:layout_width="130dp"
+        android:layout_height="21dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center|right|center_horizontal"
+        android:text="gia"
+        android:textColor="#C51B1B"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.984"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_listorder"
+        app:layout_constraintTop_toBottomOf="@+id/food_somon_listorder" />
+
+    <ImageView
+        android:id="@+id/img_Food_listorder"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.228"
+        app:srcCompat="@drawable/order" />
+
+    <TextView
+        android:id="@+id/tv_resultOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="0sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

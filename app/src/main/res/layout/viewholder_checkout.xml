@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listFoodCheckout"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginRight="25dp"
+    android:background="@drawable/category_background1">
+
+    <TextView
+        android:id="@+id/food_Name_checkout5"
+        android:layout_width="88dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="8dp"
+        android:gravity="left|center_vertical"
+        android:text="Thành tiền:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.112"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="230dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/abril_fatface"
+        android:gravity="right|top"
+        android:text="__________________________"
+        android:textColor="#A8A8A8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toBottomOf="@+id/food_Price_checkout" />
+
+    <TextView
+        android:id="@+id/Food_Name_checkout"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="right|center_vertical"
+        android:text="Name"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.981"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/food_Name_checkout2"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="left|center_vertical"
+        android:text="Tên:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/food_Name_checkout4"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="SL:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toBottomOf="@+id/food_Name_checkout3" />
+
+    <TextView
+        android:id="@+id/food_Name_checkout3"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="Giá:"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toBottomOf="@+id/food_Name_checkout2" />
+
+    <TextView
+        android:id="@+id/food_Price_checkout"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="60dp"
+        android:gravity="center|right|center_horizontal"
+        android:text="Gia"
+        android:textColor="#C51B1B"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.981"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toBottomOf="@+id/Food_Name_checkout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/food_quality_checkout"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:gravity="right|center_vertical"
+        android:text="SoLuong"
+        android:textColor="#6e6e70"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.981"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toBottomOf="@+id/food_Price_checkout" />
+
+    <ImageView
+        android:id="@+id/img_Food_checkout"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cat_combo" />
+
+    <TextView
+        android:id="@+id/food_SumPrice_checkout"
+        android:layout_width="130dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center|right|center_horizontal"
+        android:text="Thanh Tien"
+        android:textColor="#C51B1B"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.992"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_checkout"
+        app:layout_constraintTop_toBottomOf="@+id/textView21"
+        app:layout_constraintVertical_bias="0.272" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

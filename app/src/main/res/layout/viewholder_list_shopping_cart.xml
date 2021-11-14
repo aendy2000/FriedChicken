@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_shopping_cart"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/category_background1">
+
+    <TextView
+        android:id="@+id/Food_Name_cart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Name"
+        android:textColor="#6e6e70"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_cart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/food_soluong_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="25dp"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="#6e6e70"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/Cart_food_tang"
+        app:layout_constraintTop_toBottomOf="@+id/food_Price_cart" />
+
+    <ImageView
+        android:id="@+id/img_Food_cart"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.107"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7"
+        app:srcCompat="@drawable/cat_combo" />
+
+    <TextView
+        android:id="@+id/food_Price_cart"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="60dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="#C51B1B"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_cart"
+        app:layout_constraintTop_toBottomOf="@+id/Food_Name_cart"
+        app:layout_constraintVertical_bias="0.138" />
+
+    <TextView
+        android:id="@+id/food_Tong_cart"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:text="Tổng: "
+        android:textColor="#C51B1B"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/img_Food_cart"
+        app:layout_constraintTop_toBottomOf="@+id/food_soluong_cart" />
+
+    <ImageView
+        android:id="@+id/Cart_food_giam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/food_soluong_cart"
+        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/food_Price_cart"
+        app:layout_constraintVertical_bias="0.857"
+        app:srcCompat="@drawable/minus" />
+
+    <ImageView
+        android:id="@+id/Cart_food_tang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/food_Price_cart"
+        app:layout_constraintVertical_bias="0.181"
+        app:srcCompat="@drawable/plus" />
+
+    <ImageView
+        android:id="@+id/img_delete_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.015"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
