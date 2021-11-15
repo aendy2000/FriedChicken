@@ -114,12 +114,12 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = splitCategory.length - 1; i >= 0; i--) {
                     if (splitCategory[i].substring(splitCategory[i].indexOf("Ten=") + 4).indexOf("}}") != -1) {
                         categoryList.add(new CategoryDomain(splitCategory[i].substring(splitCategory[i].indexOf("Ten=") + 4, splitCategory[i].length() - 2),
-                                splitCategory[i].substring(splitCategory[i].indexOf("cat_"), splitCategory[i].indexOf(", Ten")), ID));
+                                splitCategory[i].substring(splitCategory[i].indexOf("HinhAnh=") + 8, splitCategory[i].indexOf(", Ten")), ID));
                         adapter = new CategoryAdapter(MainActivity.this, categoryList);
                         recyclerViewCategoryList.setAdapter(adapter);
                     } else {
                         categoryList.add(new CategoryDomain(splitCategory[i].substring(splitCategory[i].indexOf("Ten=") + 4),
-                                splitCategory[i].substring(splitCategory[i].indexOf("cat_"), splitCategory[i].indexOf(", Ten")), ID));
+                                splitCategory[i].substring(splitCategory[i].indexOf("HinhAnh=") + 8, splitCategory[i].indexOf(", Ten")), ID));
                         adapter = new CategoryAdapter(MainActivity.this, categoryList);
                         recyclerViewCategoryList.setAdapter(adapter);
                     }

@@ -48,10 +48,25 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         CartDomain cartDomain = listCart.get(position);
         if (cartDomain == null)
             return;
-
+        if (cartDomain.getIduser().indexOf("GH") != -1) {
+            int drawableResourceId1 = holder.itemView.getContext().getResources().getIdentifier("", "drawable", holder.itemView.getContext().getPackageName());
+            Glide.with(holder.itemView.getContext())
+                    .load(drawableResourceId1)
+                    .into(holder.tangCart);
+            int drawableResourceId2 = holder.itemView.getContext().getResources().getIdentifier("", "drawable", holder.itemView.getContext().getPackageName());
+            Glide.with(holder.itemView.getContext())
+                    .load(drawableResourceId2)
+                    .into(holder.giamCart);
+            int drawableResourceId3 = holder.itemView.getContext().getResources().getIdentifier("", "drawable", holder.itemView.getContext().getPackageName());
+            Glide.with(holder.itemView.getContext())
+                    .load(drawableResourceId3)
+                    .into(holder.deleteCart);
+            holder.soluongCart.setText("Số lượng: " + cartDomain.getSoluong());
+        } else {
+            holder.soluongCart.setText(cartDomain.getSoluong());
+        }
         holder.nameCart.setText(cartDomain.getTen());
         holder.giaCart.setText("Giá: " + cartDomain.getGia());
-        holder.soluongCart.setText(cartDomain.getSoluong());
         holder.tongCart.setText("Tổng: " + cartDomain.getTong());
 
         int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(cartDomain.getHinhanh(), "drawable", holder.itemView.getContext().getPackageName());
@@ -59,106 +74,108 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 .load(drawableResourceId)
                 .into(holder.foodCart);
 
-        holder.foodCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickGoToDetailtFood(cartDomain);
-            }
-        });
-
-        holder.tangCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Integer.valueOf(holder.soluongCart.getText().toString()) < 100) {
-                    int tongsl = Integer.valueOf(holder.soluongCart.getText().toString()) + 1;
-                    int tonggia = Integer.valueOf(holder.giaCart.getText().toString().split("\\.")[0].substring(5)) * tongsl;
-                    String sTonggia = "";
-                    if (tonggia < 1000) {
-                        sTonggia = tonggia + ".000 VND";
-                    } else if (tonggia < 10000) {
-                        String[] formatGia = String.valueOf(tonggia).split("");
-                        String chuoi = formatGia[1] + ".";
-                        for (int i = 2; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
-                    } else if (tonggia < 100000) {
-                        String[] formatGia = String.valueOf(tonggia).split("");
-                        String chuoi = formatGia[1] + formatGia[2] + ".";
-                        for (int i = 3; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
-                    } else if (tonggia < 1000000) {
-                        String[] formatGia = String.valueOf(tonggia).split("");
-                        String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
-                        for (int i = 4; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
-                    }
-                    holder.tongCart.setText("Tổng: " + sTonggia);
-                    holder.soluongCart.setText(String.valueOf(tongsl));
-
-                    String GIOHANG = "GH" + cartDomain.getIduser().toString().split("K")[1];
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference reference = database.getReference("GioHang");
-                    reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("SoLuong").setValue(tongsl);
-                    reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("Tong").setValue(sTonggia);
+        if (cartDomain.getIduser().indexOf("GH") == -1) {
+            holder.foodCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickGoToDetailtFood(cartDomain);
                 }
-            }
-        });
-        holder.giamCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Integer.valueOf(holder.soluongCart.getText().toString()) > 1) {
-                    int tongsl = Integer.valueOf(holder.soluongCart.getText().toString()) - 1;
-                    int tonggia = Integer.valueOf(holder.giaCart.getText().toString().split("\\.")[0].substring(5)) * tongsl;
-                    String sTonggia = "";
-                    if (tonggia < 1000) {
-                        sTonggia = tonggia + ".000 VND";
-                    } else if (tonggia < 10000) {
-                        String[] formatGia = String.valueOf(tonggia).split("");
-                        String chuoi = formatGia[1] + ".";
-                        for (int i = 2; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
-                    } else if (tonggia < 100000) {
-                        String[] formatGia = String.valueOf(tonggia).split("");
-                        String chuoi = formatGia[1] + formatGia[2] + ".";
-                        for (int i = 3; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
-                    } else if (tonggia < 1000000) {
-                        String[] formatGia = String.valueOf(tonggia).split("");
-                        String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
-                        for (int i = 4; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
+            });
+            holder.tangCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Integer.valueOf(holder.soluongCart.getText().toString()) < 100) {
+                        int tongsl = Integer.valueOf(holder.soluongCart.getText().toString()) + 1;
+                        int tonggia = Integer.valueOf(holder.giaCart.getText().toString().split("\\.")[0].substring(5)) * tongsl;
+                        String sTonggia = "";
+                        if (tonggia < 1000) {
+                            sTonggia = tonggia + ".000 VND";
+                        } else if (tonggia < 10000) {
+                            String[] formatGia = String.valueOf(tonggia).split("");
+                            String chuoi = formatGia[1] + ".";
+                            for (int i = 2; i < formatGia.length; i++)
+                                chuoi += formatGia[i];
+                            sTonggia = chuoi + ".000 VND";
+                        } else if (tonggia < 100000) {
+                            String[] formatGia = String.valueOf(tonggia).split("");
+                            String chuoi = formatGia[1] + formatGia[2] + ".";
+                            for (int i = 3; i < formatGia.length; i++)
+                                chuoi += formatGia[i];
+                            sTonggia = chuoi + ".000 VND";
+                        } else if (tonggia < 1000000) {
+                            String[] formatGia = String.valueOf(tonggia).split("");
+                            String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
+                            for (int i = 4; i < formatGia.length; i++)
+                                chuoi += formatGia[i];
+                            sTonggia = chuoi + ".000 VND";
+                        }
+                        holder.tongCart.setText("Tổng: " + sTonggia);
+                        holder.soluongCart.setText(String.valueOf(tongsl));
+
+                        String GIOHANG = "GH" + cartDomain.getIduser().toString().split("K")[1];
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference reference = database.getReference("GioHang");
+                        reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("SoLuong").setValue(tongsl);
+                        reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("Tong").setValue(sTonggia);
                     }
-                    holder.tongCart.setText("Tổng: " + sTonggia);
-                    holder.soluongCart.setText(String.valueOf(tongsl));
-
-                    String GIOHANG = "GH" + cartDomain.getIduser().toString().split("K")[1];
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference reference = database.getReference("GioHang");
-                    reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("SoLuong").setValue(tongsl);
-                    reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("Tong").setValue(sTonggia);
                 }
-            }
-        });
-        holder.deleteCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("GioHang");
-                String GIOHANG = "GH" + cartDomain.getIduser().toString().split("K")[1];
-                myRef.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).removeValue();
+            });
+            holder.giamCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Integer.valueOf(holder.soluongCart.getText().toString()) > 1) {
+                        int tongsl = Integer.valueOf(holder.soluongCart.getText().toString()) - 1;
+                        int tonggia = Integer.valueOf(holder.giaCart.getText().toString().split("\\.")[0].substring(5)) * tongsl;
+                        String sTonggia = "";
+                        if (tonggia < 1000) {
+                            sTonggia = tonggia + ".000 VND";
+                        } else if (tonggia < 10000) {
+                            String[] formatGia = String.valueOf(tonggia).split("");
+                            String chuoi = formatGia[1] + ".";
+                            for (int i = 2; i < formatGia.length; i++)
+                                chuoi += formatGia[i];
+                            sTonggia = chuoi + ".000 VND";
+                        } else if (tonggia < 100000) {
+                            String[] formatGia = String.valueOf(tonggia).split("");
+                            String chuoi = formatGia[1] + formatGia[2] + ".";
+                            for (int i = 3; i < formatGia.length; i++)
+                                chuoi += formatGia[i];
+                            sTonggia = chuoi + ".000 VND";
+                        } else if (tonggia < 1000000) {
+                            String[] formatGia = String.valueOf(tonggia).split("");
+                            String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
+                            for (int i = 4; i < formatGia.length; i++)
+                                chuoi += formatGia[i];
+                            sTonggia = chuoi + ".000 VND";
+                        }
+                        holder.tongCart.setText("Tổng: " + sTonggia);
+                        holder.soluongCart.setText(String.valueOf(tongsl));
 
-                Intent Cart = new Intent(myContex, CartActivity.class);
-                Cart.putExtra("idUser", cartDomain.getIduser());
-                ((CartActivity)myContex).finish();
-                myContex.startActivity(Cart);
-                Toast.makeText(myContex, "Đã xóa " + cartDomain.getTen() + " khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
-            }
-        });
+                        String GIOHANG = "GH" + cartDomain.getIduser().toString().split("K")[1];
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference reference = database.getReference("GioHang");
+                        reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("SoLuong").setValue(tongsl);
+                        reference.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).child("Tong").setValue(sTonggia);
+                    }
+                }
+            });
+            holder.deleteCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference("GioHang");
+                    String GIOHANG = "GH" + cartDomain.getIduser().toString().split("K")[1];
+                    myRef.child(GIOHANG).child(cartDomain.getDanhmuc()).child(cartDomain.getMamonan()).removeValue();
+
+                    Intent Cart = new Intent(myContex, CartActivity.class);
+                    Cart.putExtra("idUser", cartDomain.getIduser());
+                    ((CartActivity) myContex).finish();
+                    myContex.startActivity(Cart);
+                    Toast.makeText(myContex, "Đã xóa " + cartDomain.getTen() + " khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     private void onClickGoToDetailtFood(CartDomain cartDomain) {
