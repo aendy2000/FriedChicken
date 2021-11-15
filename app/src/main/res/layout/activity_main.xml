@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="20dp"
-                    android:text="Chicken Fried"
+                    android:text="Fried Chicken"
                     android:textColor="@color/design_default_color_error"
                     android:textSize="20sp"
                     android:textStyle="bold"

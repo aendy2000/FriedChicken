@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainAdminLayout"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginBottom="0dp"
+    android:background="@drawable/category_background1">
+
+    <ImageView
+        android:id="@+id/categoryAdminPic"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/categoryAdminName"
+        android:layout_width="180dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="title"
+        android:textColor="#6e6e70"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintStart_toEndOf="@+id/categoryAdminPic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

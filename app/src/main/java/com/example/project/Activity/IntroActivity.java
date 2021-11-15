@@ -55,7 +55,9 @@ public class IntroActivity extends AppCompatActivity {
                                         login.putExtra("nameUser", hashMap.get("Ten").toString().trim());
                                         startActivity(login);
                                     } else {
-
+                                        Intent login = new Intent(IntroActivity.this, MainAdminActivity.class);
+                                        login.putExtra("nameUser", hashMap.get("Ten").toString().trim());
+                                        startActivity(login);
                                     }
 
                                 } else {

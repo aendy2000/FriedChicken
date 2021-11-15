@@ -10,6 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
         <activity
+            android:name=".Activity.OrderManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.CartManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.ProductManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.CategoryManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.AcountManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.MainAdminActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activity.SupportActivity"
             android:exported="true" />
         <activity
