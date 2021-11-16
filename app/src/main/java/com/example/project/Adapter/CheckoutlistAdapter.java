@@ -109,11 +109,11 @@ public class CheckoutlistAdapter extends RecyclerView.Adapter<CheckoutlistAdapte
             }
 
         });
+        if (checkoutlistdomain.getTrangthai().equals("Chờ duyệt")) {
+            holder.btnHuy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-        holder.btnHuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkoutlistdomain.getTrangthai().equals("Chờ duyệt")) {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference reference = database.getReference("DonHang");
                     reference.child("DH" + checkoutlistdomain.getIdUser().split("K")[1]).child("|" + checkoutlistdomain.getNgaymua()).child("TrangThai").setValue("Đã hủy");
@@ -123,13 +123,11 @@ public class CheckoutlistAdapter extends RecyclerView.Adapter<CheckoutlistAdapte
                     ((ListOrderActivity) myContex).finish();
                     myContex.startActivity(listOrder);
                     Toast.makeText(myContex, "Đã hủy đơn hàng ", Toast.LENGTH_LONG).show();
-
-                } else {
-                    Toast.makeText(myContex, "Không thể hủy đơn hàng " + checkoutlistdomain.getTrangthai() + "!", Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
+            });
+        } else {
+            holder.btnHuy.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
