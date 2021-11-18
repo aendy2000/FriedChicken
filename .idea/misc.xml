@@ -28,6 +28,10 @@
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/viewholder_list_cat.xml" value="0.16261398176291794" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/viewholder_list_order.xml" value="0.33" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/viewholder_list_shopping_cart.xml" value="0.33" />
+        <entry key="..\:/FriedChicken/app/src/main/res/layout/activity_add_category.xml" value="0.1" />
+        <entry key="..\:/FriedChicken/app/src/main/res/layout/activity_category_manager.xml" value="0.1" />
+        <entry key="..\:/FriedChicken/app/src/main/res/layout/viewholder_list_cart_manager.xml" value="0.1" />
+        <entry key="..\:/FriedChicken/app/src/main/res/layout/viewholder_list_category_manager.xml" value="0.16666666666666666" />
       </map>
     </option>
   </component>
