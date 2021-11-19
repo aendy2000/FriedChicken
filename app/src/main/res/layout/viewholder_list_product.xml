@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listFoodProduct"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginLeft="25dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginRight="25dp"
+    android:background="@drawable/category_background1">
+
+    <TextView
+        android:id="@+id/Food_NameProduct"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="left|center_vertical"
+        android:text="Name"
+        android:textColor="#6e6e70"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/img_FoodProduct"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_FoodProduct"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.112"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cat_combo" />
+
+    <TextView
+        android:id="@+id/food_DecriptionProduct"
+        android:layout_width="180dp"
+        android:layout_height="34dp"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/img_FoodProduct"
+        app:layout_constraintTop_toBottomOf="@+id/Food_NameProduct" />
+
+    <TextView
+        android:id="@+id/food_PriceProduct"
+        android:layout_width="180dp"
+        android:layout_height="24dp"
+        android:gravity="center|center_horizontal|left"
+        android:text="TextView"
+        android:textColor="#C51B1B"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/img_FoodProduct"
+        app:layout_constraintTop_toBottomOf="@+id/food_DecriptionProduct"
+        app:layout_constraintVertical_bias="0.09" />
+
+    <ImageView
+        android:id="@+id/img_delete_product_listProduct"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

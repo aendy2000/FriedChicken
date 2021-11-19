@@ -28,6 +28,11 @@
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/viewholder_list_cat.xml" value="0.16261398176291794" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/viewholder_list_order.xml" value="0.33" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/viewholder_list_shopping_cart.xml" value="0.33" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/FriedChicken/app/src/main/res/layout/activity_add_product.xml" value="0.264" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/FriedChicken/app/src/main/res/layout/activity_product_manager.xml" value="0.128" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/FriedChicken/app/src/main/res/layout/item_category_product.xml" value="0.10371376811594203" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/FriedChicken/app/src/main/res/layout/item_selected_category_product.xml" value="0.10371376811594203" />
+        <entry key="..\:/Users/ADMIN/AndroidStudioProjects/FriedChicken/app/src/main/res/layout/viewholder_list_product.xml" value="0.10371376811594203" />
       </map>
     </option>
   </component>
