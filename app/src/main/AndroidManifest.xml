@@ -10,6 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
         <activity
+            android:name=".Activity.AccountAdminListManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.AccountDetailtUserActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.AccountUserListManagerActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.AddAccountAdminActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activity.CartManagerDetailtActivity"
             android:exported="true" />
         <activity
