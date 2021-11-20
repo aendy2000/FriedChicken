@@ -22,6 +22,18 @@
             android:name=".Activity.AddAccountAdminActivity"
             android:exported="true" />
         <activity
+            android:name=".Activity.AddCategoryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity.OrderDetailtOfCategoryManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.OrderDetailtManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AddProductActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.CartManagerDetailtActivity"
             android:exported="true" />
         <activity
