@@ -18,7 +18,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="700dp"
+                android:layout_height="730dp"
                 android:layout_margin="30dp"
                 android:background="@drawable/card_background">
 
@@ -74,7 +74,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_product_manager"
                     android:layout_width="match_parent"
-                    android:layout_height="520dp"
+                    android:layout_height="550dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

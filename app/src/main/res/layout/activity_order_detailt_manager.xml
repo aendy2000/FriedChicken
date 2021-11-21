@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="730dp"
         android:layout_margin="20dp"
         android:background="@drawable/card_background"
         app:layout_constraintEnd_toEndOf="parent"

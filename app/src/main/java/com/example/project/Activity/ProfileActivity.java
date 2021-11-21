@@ -245,6 +245,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (hoten.isEnabled() == false) {
                     hoten.setEnabled(true);
+                    sodienthoai.setEnabled(true);
                     email.setEnabled(true);
                     ngay.setEnabled(true);
                     thang.setEnabled(true);

@@ -1,11 +1,13 @@
 package com.example.project.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,7 +46,20 @@ public class ListFoodActivity extends AppCompatActivity {
             sDanhMuc = bundle.getString("Food");
             tendm = bundle.getString("DanhMuc");
             ID = bundle.getString("idUser");
-            danhmuc.setText(sDanhMuc);
+            DatabaseReference loadDM = FirebaseDatabase.getInstance().getReference("DanhMuc");
+            loadDM.child(sDanhMuc).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    HashMap<String, Object> hashMap = (HashMap<String, Object>) snapshot.getValue();
+                    danhmuc.setText(hashMap.get("Ten").toString());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
         }
         Home();
         recyclerViewCategory();
@@ -126,6 +141,7 @@ public class ListFoodActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("SanPham");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot record : snapshot.getChildren()) {

@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="730dp"
         android:layout_margin="30dp"
         android:background="@drawable/card_background"
         app:layout_constraintEnd_toEndOf="parent"
@@ -120,7 +120,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_orderdetailt_managerOfcategory"
             android:layout_width="0dp"
-            android:layout_height="400dp"
+            android:layout_height="440dp"
             android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

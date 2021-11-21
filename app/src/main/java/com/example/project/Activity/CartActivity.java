@@ -42,7 +42,7 @@ public class CartActivity extends AppCompatActivity {
             ID = extras.getString("idUser");
             giohang = "GH" + ID.split("K")[1];
         }
-
+        thanhtoan.setVisibility(View.INVISIBLE);
         Home();
         ProFile();
         CanCel();
@@ -94,17 +94,20 @@ public class CartActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getValue();
-                    cartlist.add(new CartDomain(data.getKey(),
-                            hashMap.get("Ten").toString(),
-                            hashMap.get("Gia").toString(),
-                            hashMap.get("Tong").toString(),
-                            hashMap.get("SoLuong").toString(),
-                            hashMap.get("HinhAnh").toString(), ID));
+                if(snapshot.getValue() != null) {
+                    thanhtoan.setVisibility(View.VISIBLE);
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getValue();
+                        cartlist.add(new CartDomain(data.getKey(),
+                                hashMap.get("Ten").toString(),
+                                hashMap.get("Gia").toString(),
+                                hashMap.get("Tong").toString(),
+                                hashMap.get("SoLuong").toString(),
+                                hashMap.get("HinhAnh").toString(), ID));
+                    }
+                    adapterCart = new CartAdapter(CartActivity.this, cartlist);
+                    cart.setAdapter(adapterCart);
                 }
-                adapterCart = new CartAdapter(CartActivity.this, cartlist);
-                cart.setAdapter(adapterCart);
             }
 
             @Override

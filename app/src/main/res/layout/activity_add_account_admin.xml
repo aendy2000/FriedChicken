@@ -22,7 +22,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="770dp"
+                android:layout_height="760dp"
                 android:layout_margin="20dp"
                 android:background="@drawable/card_background">
 

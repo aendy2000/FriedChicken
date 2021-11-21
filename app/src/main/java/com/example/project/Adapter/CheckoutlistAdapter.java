@@ -79,7 +79,7 @@ public class CheckoutlistAdapter extends RecyclerView.Adapter<CheckoutlistAdapte
         Glide.with(holder.itemView.getContext())
                 .load(drawableResourceId)
                 .into(holder.imgOrder);
-        if (checkoutlistdomain.getIdUser().indexOf("Admin") != -1) {
+        if (checkoutlistdomain.getIdUser().indexOf("Admin-") != -1) {
             holder.constranOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -104,7 +104,7 @@ public class CheckoutlistAdapter extends RecyclerView.Adapter<CheckoutlistAdapte
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("DonHang");
-                                reference.child("DH" + checkoutlistdomain.getIdUser().split("K")[1]).child(checkoutlistdomain.getNgaymua()).child("TrangThai").setValue("Đã duyệt");
+                                reference.child("DH" + checkoutlistdomain.getIdUser().split("K")[1]).child(checkoutlistdomain.getNgaymua()).child("TrangThai").child("Trangthai").setValue("Đã duyệt");
 
                                 Intent listOrder = new Intent(myContex, OrderDetailtManagerActivity.class);
                                 listOrder.putExtra("TrangThai", checkoutlistdomain.getTrangthai());
