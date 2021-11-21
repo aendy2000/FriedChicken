@@ -41,7 +41,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
     RadioButton nam, nu;
     Button xoaUser, xoaAd, sua;
     String ID, Role, avarCu, test = "";
-    TextView doimk, quenmk;
+    TextView doimk;
     Uri uri;
     private static final int MY_REQUEST_CODE = 100;
 
@@ -59,7 +59,6 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                 xoaAd.setVisibility(View.GONE);
                 sua.setVisibility(View.GONE);
                 doimk.setVisibility(View.GONE);
-                quenmk.setVisibility(View.GONE);
             } else {
                 xoaUser.setVisibility(View.GONE);
             }
