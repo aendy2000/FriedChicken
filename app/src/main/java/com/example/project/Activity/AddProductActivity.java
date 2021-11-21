@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,7 +35,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +49,6 @@ public class AddProductActivity extends AppCompatActivity {
     ImageView cancel, hinhanh;
     Button themhinhanh, luu;
     TextView tieude;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,102 +97,84 @@ public class AddProductActivity extends AppCompatActivity {
                             && !gia.getText().toString().trim().equals("")
                             && !mota.getText().toString().trim().equals("")
                             && !category.equals("")) {
-                        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        AlertDialog.Builder mydialog = new AlertDialog.Builder(AddProductActivity.this);
+                        mydialog.setTitle("Xác nhận");
+                        mydialog.setMessage("Thêm sản phẩm?");
+                        mydialog.setIcon(R.drawable.cauhoi);
+                        mydialog.setPositiveButton("[THÊM]", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                int id = 0;
-                                for (DataSnapshot data : snapshot.getChildren()) {
-                                    id = Integer.valueOf(data.getKey().split("-")[1]);
-                                }
-                                id++;
-                                String formatID;
-                                if (id < 10)
-                                    formatID = "SP-00000" + id;
-                                else if (id < 100)
-                                    formatID = "SP-0000" + id;
-                                else if (id < 1000)
-                                    formatID = "SP-000" + id;
-                                else if (id < 10000)
-                                    formatID = "SP-00" + id;
-                                else if (id < 100000)
-                                    formatID = "SP-0" + id;
-                                else
-                                    formatID = "SP-" + id;
-
-                                ContentResolver contentResolver = getContentResolver();
-                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
-                                StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
-                                fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                reference.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        int id = 0;
+                                        for (DataSnapshot data : snapshot.getChildren()) {
+                                            id = Integer.valueOf(data.getKey().split("-")[1]);
+                                        }
+                                        id++;
+                                        String formatID;
+                                        if (id < 10)
+                                            formatID = "SP-00000" + id;
+                                        else if (id < 100)
+                                            formatID = "SP-0000" + id;
+                                        else if (id < 1000)
+                                            formatID = "SP-000" + id;
+                                        else if (id < 10000)
+                                            formatID = "SP-00" + id;
+                                        else if (id < 100000)
+                                            formatID = "SP-0" + id;
+                                        else
+                                            formatID = "SP-" + id;
+
+                                        ContentResolver contentResolver = getContentResolver();
+                                        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+                                        StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
+                                        fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
-                                            public void onSuccess(Uri uri) {
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
 
-                                                int sum = Integer.valueOf(gia.getText().toString().trim());
-                                                String sTonggia = "";
-                                                if (sum < 1000) {
-                                                    sTonggia = sum + " VND";
-                                                } else if (sum < 10000) {
-                                                    String[] formatGia = String.valueOf(sum).split("");
-                                                    String chuoi = formatGia[0] + ".";
-                                                    for (int i = 1; i < formatGia.length; i++)
-                                                        chuoi += formatGia[i];
-                                                    sTonggia = chuoi + " VND";
-                                                } else if (sum < 100000) {
-                                                    String[] formatGia = String.valueOf(sum).split("");
-                                                    String chuoi = formatGia[0] + formatGia[1] + ".";
-                                                    for (int i = 2; i < formatGia.length; i++)
-                                                        chuoi += formatGia[i];
-                                                    sTonggia = chuoi + " VND";
-                                                } else if (sum < 1000000) {
-                                                    String[] formatGia = String.valueOf(sum).split("");
-                                                    String chuoi = formatGia[0] + formatGia[1] + formatGia[2] + ".";
-                                                    for (int i = 3; i < formatGia.length; i++)
-                                                        chuoi += formatGia[i];
-                                                    sTonggia = chuoi + " VND";
-                                                }  else if (sum < 10000000) {
-                                                    String[] formatGia = String.valueOf(sum).split("");
-                                                    String chuoi = formatGia[0] + "." + formatGia[1] + formatGia[2] +  formatGia[3] + ".";
-                                                    for (int i = 4; i < formatGia.length; i++)
-                                                        chuoi += formatGia[i];
-                                                    sTonggia = chuoi + " VND";
-                                                }   else if (sum < 100000000) {
-                                                    String[] formatGia = String.valueOf(sum).split("");
-                                                    String chuoi = formatGia[0] + formatGia[1] + "." + formatGia[2] + formatGia[3] + formatGia[4] + ".";
-                                                    for (int i = 5; i < formatGia.length; i++)
-                                                        chuoi += formatGia[i];
-                                                    sTonggia = chuoi + " VND";
-                                                }
+                                                        reference.child(formatID).child("Ten").setValue(ten.getText().toString().trim());
+                                                        reference.child(formatID).child("Gia").setValue(gia.getText().toString());
+                                                        reference.child(formatID).child("MoTa").setValue(mota.getText().toString().trim());
+                                                        reference.child(formatID).child("DanhMuc").setValue(category);
+                                                        reference.child(formatID).child("HinhAnh").setValue(uri.toString());
 
-                                                reference.child(formatID).child("Ten").setValue(ten.getText().toString().trim());
-                                                reference.child(formatID).child("Gia").setValue(sTonggia);
-                                                reference.child(formatID).child("MoTa").setValue(mota.getText().toString().trim());
-                                                reference.child(formatID).child("DanhMuc").setValue(category);
-                                                reference.child(formatID).child("HinhAnh").setValue(uri.toString());
+                                                        Toast.makeText(AddProductActivity.this, "Đã thêm một sản phẩm mới", Toast.LENGTH_SHORT).show();
 
-                                                Toast.makeText(AddProductActivity.this, "Đã thêm một sản phẩm mới", Toast.LENGTH_SHORT).show();
-
-                                                Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
-                                                intent.putExtra("idData", "SanPham");
-                                                finish();
-                                                startActivity(intent);
+                                                        Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
+                                                        intent.putExtra("idData", "SanPham");
+                                                        finish();
+                                                        startActivity(intent);
+                                                    }
+                                                });
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(AddProductActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
-                                }).addOnFailureListener(new OnFailureListener() {
+
                                     @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(AddProductActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    public void onCancelled(@NonNull DatabaseError error) {
                                     }
                                 });
                             }
-
+                        });
+                        mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+                            @SuppressLint("WrongConstant")
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
                             }
                         });
+                        AlertDialog alertDialog = mydialog.create();
+                        alertDialog.show();
                     } else {
                         Toast.makeText(AddProductActivity.this, "Hãy đảm bảo không một trường nào còn bỏ trống!", Toast.LENGTH_SHORT).show();
                     }
@@ -200,134 +183,82 @@ public class AddProductActivity extends AppCompatActivity {
                             && !gia.getText().toString().trim().equals("")
                             && !mota.getText().toString().trim().equals("")
                             && !category.equals("")) {
-                        reference.child(maSP).addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+                        AlertDialog.Builder mydialog = new AlertDialog.Builder(AddProductActivity.this);
+                        mydialog.setTitle("Xác nhận");
+                        mydialog.setMessage("Lưu chỉnh sửa?");
+                        mydialog.setIcon(R.drawable.cauhoi);
+                        mydialog.setPositiveButton("[LƯU]", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (test.equals("")) {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                reference.child(maSP).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (test.equals("")) {
 
-                                    int sum = Integer.valueOf(gia.getText().toString().trim());
-                                    String sTonggia = "";
-                                    if (sum < 1000) {
-                                        sTonggia = sum + " VND";
-                                    } else if (sum < 10000) {
-                                        String[] formatGia = String.valueOf(sum).split("");
-                                        String chuoi = formatGia[0] + ".";
-                                        for (int i = 1; i < formatGia.length; i++)
-                                            chuoi += formatGia[i];
-                                        sTonggia = chuoi + " VND";
-                                    } else if (sum < 100000) {
-                                        String[] formatGia = String.valueOf(sum).split("");
-                                        String chuoi = formatGia[0] + formatGia[1] + ".";
-                                        for (int i = 2; i < formatGia.length; i++)
-                                            chuoi += formatGia[i];
-                                        sTonggia = chuoi + " VND";
-                                    } else if (sum < 1000000) {
-                                        String[] formatGia = String.valueOf(sum).split("");
-                                        String chuoi = formatGia[0] + formatGia[1] + formatGia[2] + ".";
-                                        for (int i = 3; i < formatGia.length; i++)
-                                            chuoi += formatGia[i];
-                                        sTonggia = chuoi + " VND";
-                                    }  else if (sum < 10000000) {
-                                        String[] formatGia = String.valueOf(sum).split("");
-                                        String chuoi = formatGia[0] + "." + formatGia[1] + formatGia[2] +  formatGia[3] + ".";
-                                        for (int i = 4; i < formatGia.length; i++)
-                                            chuoi += formatGia[i];
-                                        sTonggia = chuoi + " VND";
-                                    }   else if (sum < 100000000) {
-                                        String[] formatGia = String.valueOf(sum).split("");
-                                        String chuoi = formatGia[0] + formatGia[1] + "." + formatGia[2] + formatGia[3] + formatGia[4] + ".";
-                                        for (int i = 5; i < formatGia.length; i++)
-                                            chuoi += formatGia[i];
-                                        sTonggia = chuoi + " VND";
-                                    }
+                                            reference.child(maSP).child("Ten").setValue(ten.getText().toString().trim());
+                                            reference.child(maSP).child("Gia").setValue(gia.getText().toString());
+                                            reference.child(maSP).child("MoTa").setValue(mota.getText().toString().trim());
+                                            reference.child(maSP).child("DanhMuc").setValue(category);
 
-                                    reference.child(maSP).child("Ten").setValue(ten.getText().toString().trim());
-                                    reference.child(maSP).child("Gia").setValue(sTonggia);
-                                    reference.child(maSP).child("MoTa").setValue(mota.getText().toString().trim());
-                                    reference.child(maSP).child("DanhMuc").setValue(category);
+                                            Toast.makeText(AddProductActivity.this, "Đã lưu chỉnh sửa sản phẩm", Toast.LENGTH_SHORT).show();
 
-                                    Toast.makeText(AddProductActivity.this, "Đã lưu chỉnh sửa sản phẩm", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
+                                            intent.putExtra("idData", "SanPham");
+                                            finish();
+                                            startActivity(intent);
+                                        } else {
+                                            ContentResolver contentResolver = getContentResolver();
+                                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
-                                    Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
-                                    intent.putExtra("idData", "SanPham");
-                                    finish();
-                                    startActivity(intent);
-                                } else {
-                                    ContentResolver contentResolver = getContentResolver();
-                                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
-                                    StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
-                                    fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
+                                            fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                                 @Override
-                                                public void onSuccess(Uri uri) {
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                    taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                        @Override
+                                                        public void onSuccess(Uri uri) {
 
-                                                    int sum = Integer.valueOf(gia.getText().toString().trim());
-                                                    String sTonggia = "";
-                                                    if (sum < 1000) {
-                                                        sTonggia = sum + " VND";
-                                                    } else if (sum < 10000) {
-                                                        String[] formatGia = String.valueOf(sum).split("");
-                                                        String chuoi = formatGia[0] + ".";
-                                                        for (int i = 1; i < formatGia.length; i++)
-                                                            chuoi += formatGia[i];
-                                                        sTonggia = chuoi + " VND";
-                                                    } else if (sum < 100000) {
-                                                        String[] formatGia = String.valueOf(sum).split("");
-                                                        String chuoi = formatGia[0] + formatGia[1] + ".";
-                                                        for (int i = 2; i < formatGia.length; i++)
-                                                            chuoi += formatGia[i];
-                                                        sTonggia = chuoi + " VND";
-                                                    } else if (sum < 1000000) {
-                                                        String[] formatGia = String.valueOf(sum).split("");
-                                                        String chuoi = formatGia[0] + formatGia[1] + formatGia[2] + ".";
-                                                        for (int i = 3; i < formatGia.length; i++)
-                                                            chuoi += formatGia[i];
-                                                        sTonggia = chuoi + " VND";
-                                                    }  else if (sum < 10000000) {
-                                                        String[] formatGia = String.valueOf(sum).split("");
-                                                        String chuoi = formatGia[0] + "." + formatGia[1] + formatGia[2] +  formatGia[3] + ".";
-                                                        for (int i = 4; i < formatGia.length; i++)
-                                                            chuoi += formatGia[i];
-                                                        sTonggia = chuoi + " VND";
-                                                    }   else if (sum < 100000000) {
-                                                        String[] formatGia = String.valueOf(sum).split("");
-                                                        String chuoi = formatGia[0] + formatGia[1] + "." + formatGia[2] + formatGia[3] + formatGia[4] + ".";
-                                                        for (int i = 5; i < formatGia.length; i++)
-                                                            chuoi += formatGia[i];
-                                                        sTonggia = chuoi + " VND";
-                                                    }
+                                                            reference.child(maSP).child("Ten").setValue(ten.getText().toString().trim());
+                                                            reference.child(maSP).child("Gia").setValue(gia.getText().toString());
+                                                            reference.child(maSP).child("MoTa").setValue(mota.getText().toString().trim());
+                                                            reference.child(maSP).child("DanhMuc").setValue(category);
+                                                            reference.child(maSP).child("HinhAnh").setValue(uri.toString());
+                                                            Toast.makeText(AddProductActivity.this, "Đã lưu chỉnh sửa sản phẩm", Toast.LENGTH_SHORT).show();
 
-                                                    reference.child(maSP).child("Ten").setValue(ten.getText().toString().trim());
-                                                    reference.child(maSP).child("Gia").setValue(sTonggia);
-                                                    reference.child(maSP).child("MoTa").setValue(mota.getText().toString().trim());
-                                                    reference.child(maSP).child("DanhMuc").setValue(category);
-                                                    reference.child(maSP).child("HinhAnh").setValue(uri.toString());
-                                                    Toast.makeText(AddProductActivity.this, "Đã lưu chỉnh sửa sản phẩm", Toast.LENGTH_SHORT).show();
-
-                                                    Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
-                                                    intent.putExtra("idData", "SanPham");
-                                                    finish();
-                                                    startActivity(intent);
+                                                            Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
+                                                            intent.putExtra("idData", "SanPham");
+                                                            finish();
+                                                            startActivity(intent);
+                                                        }
+                                                    });
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(AddProductActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                         }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(AddProductActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }
+                                    }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
 
+                                    }
+                                });
                             }
                         });
+                        mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+                            @SuppressLint("WrongConstant")
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = mydialog.create();
+                        alertDialog.show();
                     }
                 }
             }
@@ -341,7 +272,7 @@ public class AddProductActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String, Object> hashMap = (HashMap<String, Object>) snapshot.getValue();
                 ten.setText(hashMap.get("Ten").toString());
-                gia.setText(hashMap.get("Gia").toString().split(" VND")[0]);
+                gia.setText(hashMap.get("Gia").toString());
                 mota.setText(hashMap.get("MoTa").toString());
                 uri = Uri.parse(hashMap.get("HinhAnh").toString());
                 Picasso.with(AddProductActivity.this).load(uri).into(hinhanh);

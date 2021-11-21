@@ -1,10 +1,12 @@
 package com.example.project.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,10 +35,9 @@ public class CartManagerDetailtActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart_manager_detailt);
         matching();
         Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            return;
+        if (extras != null) {
+            ID = extras.getString("idGioHang");
         }
-        ID = extras.getString("idGioHang");
         load();
     }
 
@@ -44,26 +45,27 @@ public class CartManagerDetailtActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewCartDetailt.setLayoutManager(linearLayoutManager);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        ArrayList<CartDomain> cartlist = new ArrayList<>();
         DatabaseReference reference = database.getReference("GioHang");
         reference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue() == null) {
 
                 } else {
-                    String key = snapshot.getValue().toString();
-                    String[] tach = key.split("[}}],");
-                    String[] maMonAn = new String[tach.length];
-                    for (int i = 0; i < tach.length; i++) {
-                        if (tach[i].indexOf("MG") != -1) {
-                            maMonAn[i] = "MonGa;" + tach[i].substring(tach[i].indexOf("MG"), tach[i].indexOf("MG") + 12);
-                        } else if (tach[i].indexOf("CB") != -1) {
-                            maMonAn[i] = "ComBo;" + tach[i].substring(tach[i].indexOf("CB"), tach[i].indexOf("CB") + 12);
-                        } else if (tach[i].indexOf("AV") != -1) {
-                            maMonAn[i] = "AnVat;" + tach[i].substring(tach[i].indexOf("AV"), tach[i].indexOf("AV") + 12);
-                        }
+                    for (DataSnapshot data : snapshot.getChildren()) {
+                        HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getValue();
+                        cartlist.add(new CartDomain(data.getKey(),
+                                hashMap.get("Ten").toString(),
+                                hashMap.get("Gia").toString(),
+                                hashMap.get("Tong").toString(),
+                                hashMap.get("SoLuong").toString(),
+                                hashMap.get("HinhAnh").toString(),"Admin-TK" + ID.split("GH")[1]));
+
                     }
-                    addCart(maMonAn);
+                    recyclerViewCartDetailtAdapter = new CartAdapter(CartManagerDetailtActivity.this, cartlist);
+                    recyclerViewCartDetailt.setAdapter(recyclerViewCartDetailtAdapter);
                 }
             }
 
@@ -73,41 +75,6 @@ public class CartManagerDetailtActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void addCart(String[] maMonAn) {
-        ArrayList<CartDomain> cartlist = new ArrayList<>();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference("GioHang");
-        for (int i = 0; i < maMonAn.length; i++) {
-            reference.child(ID).child(maMonAn[i].split(";")[0]).child(maMonAn[i].split(";")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, Object> hashMap = (HashMap<String, Object>) snapshot.getValue();
-                    String danhmuc = "";
-                    if (snapshot.getKey().indexOf("MG") != -1)
-                        danhmuc = "MonGa";
-                    else if (snapshot.getKey().indexOf("CB") != -1)
-                        danhmuc = "ComBo";
-                    else if (snapshot.getKey().indexOf("AV") != -1)
-                        danhmuc = "AnVat";
-                    cartlist.add(new CartDomain(danhmuc, snapshot.getKey(),
-                            hashMap.get("Ten").toString(),
-                            hashMap.get("Gia").toString(),
-                            hashMap.get("Tong").toString(),
-                            hashMap.get("SoLuong").toString(),
-                            hashMap.get("HinhAnh").toString(), ID));
-
-                    recyclerViewCartDetailtAdapter = new CartAdapter(CartManagerDetailtActivity.this, cartlist);
-                    recyclerViewCartDetailt.setAdapter(recyclerViewCartDetailtAdapter);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
-        }
-    }
-
 
     private void matching() {
         recyclerViewCartDetailt = (RecyclerView) findViewById(R.id.rcv_cart_manager_detailt);

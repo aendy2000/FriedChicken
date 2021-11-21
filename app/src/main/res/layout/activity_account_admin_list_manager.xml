@@ -29,7 +29,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_list_account_admin"
                     android:layout_width="0dp"
-                    android:layout_height="630dp"
+                    android:layout_height="650dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

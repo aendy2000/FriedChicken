@@ -6,7 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.DecimalFormat;
+import android.icu.text.NumberFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -35,6 +40,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class CheckoutActivity extends AppCompatActivity {
     RecyclerView recyclerCheckout;
     RecyclerView.Adapter adapterRecyclerCheckout;
@@ -45,6 +51,8 @@ public class CheckoutActivity extends AppCompatActivity {
     FloatingActionButton btncart;
     String ID, ndDonHang;
     EditText hoten, sdt, diachi;
+    NumberFormat formatter = new DecimalFormat("#,###");
+    int TongCong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +65,6 @@ public class CheckoutActivity extends AppCompatActivity {
             return;
         }
         ID = extras.getString("idUser");
-        ndDonHang = extras.getString("ResultCheckout");
         show();
         Cancel();
         ProFile();
@@ -67,6 +74,7 @@ public class CheckoutActivity extends AppCompatActivity {
         Donhang();
         Support();
     }
+
     private void Support() {
         support.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +85,7 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
     private void Donhang() {
         donhang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,35 +96,41 @@ public class CheckoutActivity extends AppCompatActivity {
             }
         });
     }
+
     private void show() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerCheckout.setLayoutManager(linearLayoutManager);
         ArrayList<CheckoutDomain> checkOutlist = new ArrayList<>();
-        String[] tachDanhMuc = ndDonHang.split("-------------------------------------");
-        for (int i = 0; i < tachDanhMuc.length - 1; i++) {
-            int subDmuc = tachDanhMuc[i].split("DanhMuc:")[1].indexOf("Ma:");
-            int subMa = tachDanhMuc[i].split("Ma:")[1].indexOf("Ten:");
-            int subTen = tachDanhMuc[i].split("Ten:")[1].indexOf("Gia:");
-            int subGia = tachDanhMuc[i].split("Gia:")[1].indexOf("SoLuong:");
-            int subSoluong = tachDanhMuc[i].split("SoLuong:")[1].indexOf("Tong:");
-            int subTong = tachDanhMuc[i].split("Tong:")[1].indexOf("HinhAnh:");
-            String dMuc = tachDanhMuc[i].toString().split("DanhMuc:")[1].substring(0, subDmuc);
-            String dMa = tachDanhMuc[i].toString().split("Ma:")[1].substring(0, subMa);
-            String dTen = tachDanhMuc[i].toString().split("Ten:")[1].substring(0, subTen);
-            String dGia = tachDanhMuc[i].toString().split("Gia:")[1].substring(0, subGia);
-            String dSoLuong = tachDanhMuc[i].toString().split("SoLuong:")[1].substring(0, subSoluong);
-            String dTong = tachDanhMuc[i].toString().split("Tong:")[1].substring(0, subTong);
-            String dHinhAnh = tachDanhMuc[i].toString().split("HinhAnh:")[1];
-            checkOutlist.add(new CheckoutDomain(dMa, dTen, dGia, dSoLuong, dTong, dHinhAnh, ID));
-        }
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("GioHang");
+        reference.child("GH" + ID.split("K")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int TongTien = 0;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getValue();
+                    checkOutlist.add(new CheckoutDomain(data.getKey(),
+                            hashMap.get("Ten").toString(),
+                            hashMap.get("Gia").toString(),
+                            hashMap.get("SoLuong").toString(),
+                            hashMap.get("Tong").toString(),
+                            hashMap.get("HinhAnh").toString(),
+                            ID));
+                    TongTien += Integer.valueOf(hashMap.get("Tong").toString());
+                }
+                TongCong = TongTien;
+                result.setText(formatter.format(TongTien) + " VND");
+                adapterRecyclerCheckout = new CheckOutAdapter(CheckoutActivity.this, checkOutlist);
+                recyclerCheckout.setAdapter(adapterRecyclerCheckout);
+            }
 
-        result.setText(tachDanhMuc[tachDanhMuc.length - 1].toString().split("TongCong:")[1]);
-        adapterRecyclerCheckout = new CheckOutAdapter(CheckoutActivity.this, checkOutlist);
-        recyclerCheckout.setAdapter(adapterRecyclerCheckout);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference("TaiKhoan");
-        reference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            }
+        });
+
+        DatabaseReference referenceTK = FirebaseDatabase.getInstance().getReference("TaiKhoan");
+        referenceTK.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
@@ -141,84 +156,93 @@ public class CheckoutActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                String giohang = "GH" + ID.split("K")[1];
-                FirebaseDatabase databaseremove = FirebaseDatabase.getInstance();
-                DatabaseReference referenceremove = databaseremove.getReference("GioHang");
-                referenceremove.child(giohang).removeValue();
+                if (!hoten.getText().toString().trim().equals("")
+                        && !hoten.getText().toString().trim().equals("")
+                        && !hoten.getText().toString().trim().equals("")) {
 
-                LocalDateTime myDateObj = LocalDateTime.now();
-                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyMMdd-HH:mm:ss");
-                String maDonHang = myDateObj.format(myFormatObj);
-                FirebaseDatabase databaseadd = FirebaseDatabase.getInstance();
-                DatabaseReference referenceradd = databaseadd.getReference("DonHang");
-                referenceradd.child("DH" + ID.split("K")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String[] tachDanhMuc = ndDonHang.split("-------------------------------------");
-                        for (int i = 0; i < tachDanhMuc.length - 1; i++) {
-                            int subDmuc = tachDanhMuc[i].split("DanhMuc:")[1].indexOf("Ma:");
-                            int subMa = tachDanhMuc[i].split("Ma:")[1].indexOf("Ten:");
-                            int subTen = tachDanhMuc[i].split("Ten:")[1].indexOf("Gia:");
-                            int subGia = tachDanhMuc[i].split("Gia:")[1].indexOf("SoLuong:");
-                            int subSoluong = tachDanhMuc[i].split("SoLuong:")[1].indexOf("Tong:");
-                            int subTong = tachDanhMuc[i].split("Tong:")[1].indexOf("HinhAnh:");
-                            String dMuc = tachDanhMuc[i].toString().split("DanhMuc:")[1].substring(0, subDmuc);
-                            String dMa = tachDanhMuc[i].toString().split("Ma:")[1].substring(0, subMa);
-                            String dTen = tachDanhMuc[i].toString().split("Ten:")[1].substring(0, subTen);
-                            String dGia = tachDanhMuc[i].toString().split("Gia:")[1].substring(0, subGia);
-                            String dSoLuong = tachDanhMuc[i].toString().split("SoLuong:")[1].substring(0, subSoluong);
-                            String dTong = tachDanhMuc[i].toString().split("Tong:")[1].substring(0, subTong);
-                            String dHinhAnh = tachDanhMuc[i].toString().split("HinhAnh:")[1];
-                            referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child(dMuc).child(dMa).child("Ten").setValue(dTen);
-                            referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child(dMuc).child(dMa).child("Gia").setValue(dGia);
-                            referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child(dMuc).child(dMa).child("SoLuong").setValue(dSoLuong);
-                            referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child(dMuc).child(dMa).child("Tong").setValue(dTong);
-                            referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child(dMuc).child(dMa).child("HinhAnh").setValue(dHinhAnh);
-                            int iSoMon = 1 + i;
-                            somon.setText(iSoMon + " món");
+                    AlertDialog.Builder mydialog = new AlertDialog.Builder(CheckoutActivity.this);
+                    mydialog.setTitle("Xác nhận");
+                    mydialog.setMessage("Bạn chắc chắn muốn mua hàng?");
+                    mydialog.setIcon(R.drawable.cauhoi);
+                    mydialog.setPositiveButton("[ĐẶT HÀNG]", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            LocalDateTime myDateObj = LocalDateTime.now();
+                            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyMMdd-HH:mm:ss");
+                            String maDonHang = myDateObj.format(myFormatObj);
+
+                            DatabaseReference referenceGioHang = FirebaseDatabase.getInstance().getReference("GioHang");
+                            DatabaseReference referenceDonHang = FirebaseDatabase.getInstance().getReference("DonHang");
+                            referenceGioHang.child("GH" + ID.split("K")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    int somon = 0;
+                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                        HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getValue();
+                                        referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child(data.getKey()).child("Ten").setValue(hashMap.get("Ten").toString());
+                                        referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child(data.getKey()).child("Gia").setValue(hashMap.get("Gia").toString());
+                                        referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child(data.getKey()).child("SoLuong").setValue(hashMap.get("SoLuong").toString());
+                                        referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child(data.getKey()).child("Tong").setValue(hashMap.get("Tong").toString());
+                                        referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child(data.getKey()).child("HinhAnh").setValue(hashMap.get("HinhAnh").toString());
+                                        somon++;
+                                    }
+                                    referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child("TrangThai").child("Trangthai").setValue("Chờ duyệt");
+                                    referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child("SoMon").child("Somon").setValue(String.valueOf(somon));
+                                    referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child("TongCong").child("Tongcong").setValue(String.valueOf(TongCong));
+                                    referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child("ThongTin").child("Ten").setValue(hoten.getText().toString().trim());
+                                    referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child("ThongTin").child("SDT").setValue(sdt.getText().toString().trim());
+                                    referenceDonHang.child("DH" + ID.split("K")[1]).child(maDonHang).child("ThongTin").child("DiaChi").setValue(diachi.getText().toString().trim());
+
+                                    referenceGioHang.child("GH" + ID.split("K")[1]).removeValue();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                            FirebaseDatabase databasetk = FirebaseDatabase.getInstance();
+                            DatabaseReference referencetk = databasetk.getReference("TaiKhoan");
+                            referencetk.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshottk) {
+                                    try {
+                                        HashMap<String, Object> hashMaptk = (HashMap<String, Object>) snapshottk.getValue();
+                                        String name = hashMaptk.get("Ten").toString();
+                                        finishAffinity();
+                                        Intent intent = new Intent(CheckoutActivity.this, MainActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("idUser", ID);
+                                        bundle.putSerializable("nameUser", name);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                        Toast.makeText(CheckoutActivity.this, "Đặt hàng thành công", Toast.LENGTH_LONG).show();
+                                    } catch (Exception e) {
+                                        e.toString();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }
-                        referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child("TrangThai").setValue("Chờ duyệt");
-                        referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child("SoMon").setValue(somon.getText());
-                        referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child("TongCong").setValue(tachDanhMuc[tachDanhMuc.length - 1].split("TongCong:")[1]);
-                        referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child("ThongTin").child("Ten").setValue(hoten.getText().toString());
-                        referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child("ThongTin").child("SDT").setValue(sdt.getText().toString());
-                        referenceradd.child("DH" + ID.split("K")[1]).child("|" + maDonHang).child("ThongTin").child("DiaChi").setValue(diachi.getText().toString());
-
-                    }
-
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                FirebaseDatabase databasetk = FirebaseDatabase.getInstance();
-                DatabaseReference referencetk = databasetk.getReference("TaiKhoan");
-                referencetk.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshottk) {
-                        try {
-                            HashMap<String, Object> hashMaptk = (HashMap<String, Object>) snapshottk.getValue();
-                            String name = hashMaptk.get("Ten").toString();
-                            finishAffinity();
-                            Intent intent = new Intent(CheckoutActivity.this, MainActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("idUser", ID);
-                            bundle.putSerializable("nameUser", name);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            Toast.makeText(CheckoutActivity.this, "Đặt hàng thành công", Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            e.toString();
+                    });
+                    mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+                        @SuppressLint("WrongConstant")
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
                         }
-                    }
+                    });
+                    AlertDialog alertDialog = mydialog.create();
+                    alertDialog.show();
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                } else {
+                    Toast.makeText(CheckoutActivity.this, "Phải nhập đầy đủ thông tin giao hàng!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

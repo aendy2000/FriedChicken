@@ -51,7 +51,7 @@ public class AddAccountAdminActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot data : snapshot.getChildren()) {
-                            if (data.getKey().toUpperCase().equals(taikhoan.getText().toString().trim().toUpperCase())) {
+                            if (data.getKey().toUpperCase().substring(2).equals(taikhoan.getText().toString().trim().toUpperCase())) {
                                 Toast.makeText(AddAccountAdminActivity.this, "Tài khoản đã tồn tại!", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -73,67 +73,72 @@ public class AddAccountAdminActivity extends AppCompatActivity {
                                 return;
                             } else {
                                 if (pass.getText().toString().trim().equals(rePass.getText().toString().trim())) {
-                                    if (email.getText().toString().trim().indexOf("@") != -1
-                                            && email.getText().toString().trim().indexOf(".com") != -1
-                                            && email.getText().toString().trim().indexOf("@.com") == -1
-                                            && email.getText().toString().trim().indexOf(" ") == -1) {
+                                    if (sdt.getText().toString().length() > 9 && sdt.getText().toString().length() < 12) {
 
-                                        AlertDialog.Builder mydialog = new AlertDialog.Builder(AddAccountAdminActivity.this);
-                                        mydialog.setTitle("Xác nhận");
-                                        mydialog.setMessage("Thêm tài khoản " + taikhoan.getText().toString() + "?");
-                                        mydialog.setIcon(R.drawable.cauhoi);
-                                        mydialog.setPositiveButton("THÊM", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                reference.child("TK" + taikhoan.getText().toString()).child("Ten").setValue(ten.getText().toString().trim());
-                                                reference.child("TK" + taikhoan.getText().toString()).child("SDT").setValue(sdt.getText().toString().trim());
-                                                reference.child("TK" + taikhoan.getText().toString()).child("Role").setValue("Admin");
-                                                reference.child("TK" + taikhoan.getText().toString()).child("Password").setValue(pass.getText().toString().trim());
-                                                String ngaysinh = "";
-                                                if (Integer.valueOf(ngay.getText().toString()) < 10) {
-                                                    if (Integer.valueOf(thang.getText().toString()) < 10)
-                                                        ngaysinh = "0" + Integer.valueOf(ngay.getText().toString())
-                                                                + "-0" + Integer.valueOf(thang.getText().toString())
-                                                                + "-" + namsinh.getText().toString();
+                                        if (email.getText().toString().trim().indexOf("@") != -1
+                                                && email.getText().toString().trim().indexOf(".com") != -1
+                                                && email.getText().toString().trim().indexOf("@.com") == -1
+                                                && email.getText().toString().trim().indexOf(" ") == -1) {
+
+                                            AlertDialog.Builder mydialog = new AlertDialog.Builder(AddAccountAdminActivity.this);
+                                            mydialog.setTitle("Xác nhận");
+                                            mydialog.setMessage("Thêm tài khoản " + taikhoan.getText().toString() + "?");
+                                            mydialog.setIcon(R.drawable.cauhoi);
+                                            mydialog.setPositiveButton("[THÊM]", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("Ten").setValue(ten.getText().toString().trim());
+                                                    reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("SDT").setValue(sdt.getText().toString().trim());
+                                                    reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("Role").setValue("Admin");
+                                                    reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("Password").setValue(pass.getText().toString().trim());
+                                                    String ngaysinh = "";
+                                                    if (Integer.valueOf(ngay.getText().toString()) < 10) {
+                                                        if (Integer.valueOf(thang.getText().toString()) < 10)
+                                                            ngaysinh = "0" + Integer.valueOf(ngay.getText().toString())
+                                                                    + "-0" + Integer.valueOf(thang.getText().toString())
+                                                                    + "-" + namsinh.getText().toString();
+                                                        else
+                                                            ngaysinh = "0" + Integer.valueOf(ngay.getText().toString())
+                                                                    + "-" + thang.getText().toString()
+                                                                    + "-" + namsinh.getText().toString();
+                                                    } else {
+                                                        if (Integer.valueOf(thang.getText().toString()) < 10)
+                                                            ngaysinh = ngay.getText().toString()
+                                                                    + "-0" + Integer.valueOf(thang.getText().toString())
+                                                                    + "-" + namsinh.getText().toString();
+                                                        else
+                                                            ngaysinh = ngay.getText().toString()
+                                                                    + "-" + thang.getText().toString()
+                                                                    + "-" + namsinh.getText().toString();
+                                                    }
+                                                    reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("NgaySinh").setValue(ngaysinh);
+                                                    if (nam.isChecked())
+                                                        reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("GioiTinh").setValue("Nam");
                                                     else
-                                                        ngaysinh = "0" + Integer.valueOf(ngay.getText().toString())
-                                                                + "-" + thang.getText().toString()
-                                                                + "-" + namsinh.getText().toString();
-                                                } else {
-                                                    if (Integer.valueOf(thang.getText().toString()) < 10)
-                                                        ngaysinh = ngay.getText().toString()
-                                                                + "-0" + Integer.valueOf(thang.getText().toString())
-                                                                + "-" + namsinh.getText().toString();
-                                                    else
-                                                        ngaysinh = ngay.getText().toString()
-                                                                + "-" + thang.getText().toString()
-                                                                + "-" + namsinh.getText().toString();
+                                                        reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("GioiTinh").setValue("Nữ");
+                                                    reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("Email").setValue(email.getText().toString().trim());
+                                                    reference.child("TK" + taikhoan.getText().toString().toUpperCase()).child("DiaChi").setValue(diachi.getText().toString().trim());
+
+                                                    Toast.makeText(AddAccountAdminActivity.this, "Đã thêm tài khoản " + taikhoan.getText().toString().trim(), Toast.LENGTH_SHORT).show();
+                                                    finish();
                                                 }
-                                                reference.child("TK" + taikhoan.getText().toString()).child("NgaySinh").setValue(ngaysinh);
-                                                if (nam.isChecked())
-                                                    reference.child("TK" + taikhoan.getText().toString()).child("GioiTinh").setValue("Nam");
-                                                else
-                                                    reference.child("TK" + taikhoan.getText().toString()).child("GioiTinh").setValue("Nữ");
-                                                reference.child("TK" + taikhoan.getText().toString()).child("Email").setValue(email.getText().toString().trim());
-                                                reference.child("TK" + taikhoan.getText().toString()).child("DiaChi").setValue(diachi.getText().toString().trim());
+                                            });
+                                            mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+                                                @SuppressLint("WrongConstant")
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    dialogInterface.cancel();
+                                                }
+                                            });
+                                            AlertDialog alertDialog = mydialog.create();
+                                            alertDialog.show();
 
-                                                Toast.makeText(AddAccountAdminActivity.this, "Đã thêm tài khoản " + taikhoan.getText().toString().trim(), Toast.LENGTH_SHORT).show();
-                                                finish();
-                                            }
-                                        });
-                                        mydialog.setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
-                                            @SuppressLint("WrongConstant")
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                dialogInterface.cancel();
-                                            }
-                                        });
-                                        AlertDialog alertDialog = mydialog.create();
-                                        alertDialog.show();
-
+                                        } else {
+                                            Toast.makeText(AddAccountAdminActivity.this, "Email không hợp lệ!", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
                                     } else {
-                                        Toast.makeText(AddAccountAdminActivity.this, "Email không hợp lệ!", Toast.LENGTH_SHORT).show();
-                                        return;
+                                        Toast.makeText(AddAccountAdminActivity.this, "Số điện thoại không hợp lệ!", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
                                     Toast.makeText(AddAccountAdminActivity.this, "Mật khẩu không trùng khớp!", Toast.LENGTH_SHORT).show();

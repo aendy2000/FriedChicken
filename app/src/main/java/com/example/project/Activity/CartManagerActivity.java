@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CartManagerActivity extends AppCompatActivity {
     String ID;
@@ -62,24 +63,14 @@ public class CartManagerActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int i = 0;
                 for (DataSnapshot record: snapshot.getChildren()){
-                    String[] somon = record.getValue().toString().split("[}},]");
-                    int dem = 0;
-                    for (int i = 0; i < somon.length; i++) {
-                        if(somon[i].indexOf("MG") != -1) {
-                            String[] tachAV = somon[i].split("MG");
-                            dem += tachAV.length - 1;
-                        } else if(somon[i].indexOf("CB") != -1) {
-                            String[] tachAV = somon[i].split("CB");
-                            dem += tachAV.length - 1;
-                        } else if(somon[i].indexOf("AV") != -1) {
-                            String[] tachAV = somon[i].split("AV");
-                            dem += tachAV.length - 1;
-                        }
+                    for (DataSnapshot value : snapshot.child(record.getKey()).getChildren()) {
+                        HashMap<String, Object> hashMap = (HashMap<String, Object>) value.getValue();
+                        i++;
                     }
-                    cartlist.add(new CartManagerDomain(record.getKey(), String.valueOf(dem)));
+                    cartlist.add(new CartManagerDomain(record.getKey(), String.valueOf(i)));
                 }
-
                 cartmanagerAdapter = new CartManagerAdapter(CartManagerActivity.this, cartlist);
                 cartmanager.setAdapter(cartmanagerAdapter);
             }

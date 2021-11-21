@@ -6,11 +6,20 @@ public class CategoryDomain implements Serializable {
     private String title;
     private String pic;
     private String UserID;
-
-    public CategoryDomain(String title, String pic, String UserID) {
+    private String idDm;
+    public CategoryDomain(String title, String pic, String UserID, String idDm) {
         this.title = title;
         this.pic = pic;
         this.UserID = UserID;
+        this.idDm = idDm;
+    }
+
+    public String getIdDm() {
+        return idDm;
+    }
+
+    public void setIdDm(String idDm) {
+        this.idDm = idDm;
     }
 
     public String getTitle() {

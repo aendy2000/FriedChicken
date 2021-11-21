@@ -1,6 +1,9 @@
 package com.example.project.Adapter;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,13 +60,31 @@ public class CategoryManagerAdapter extends RecyclerView.Adapter<CategoryManager
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference database = FirebaseDatabase.getInstance().getReference("DanhMuc");
-                database.child(categoryManagerDomain.getId()).removeValue();
-                Toast.makeText(myContex, "Đã xóa danh mục", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(myContex, CategoryManagerActivity.class);
-                intent.putExtra("idData", "DanhMuc");
-                ((CategoryManagerActivity)myContex).finish();
-                myContex.startActivity(intent);
+                AlertDialog.Builder mydialog = new AlertDialog.Builder(myContex);
+                mydialog.setTitle("Xác nhận");
+                mydialog.setMessage("Xóa danh mục " + categoryManagerDomain.getTen() + "?");
+                mydialog.setIcon(R.drawable.cauhoi);
+                mydialog.setPositiveButton("[XÓA]", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DatabaseReference database = FirebaseDatabase.getInstance().getReference("DanhMuc");
+                        database.child(categoryManagerDomain.getId()).removeValue();
+                        Toast.makeText(myContex, "Đã xóa danh mục", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(myContex, CategoryManagerActivity.class);
+                        intent.putExtra("idData", "DanhMuc");
+                        ((CategoryManagerActivity)myContex).finish();
+                        myContex.startActivity(intent);
+                    }
+                });
+                mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+                    @SuppressLint("WrongConstant")
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                AlertDialog alertDialog = mydialog.create();
+                alertDialog.show();
             }
         });
     }

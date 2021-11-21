@@ -10,9 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -53,6 +56,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     Uri uri;
     String Madanhmuc, test = "";
     TextView tieude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +64,10 @@ public class AddCategoryActivity extends AppCompatActivity {
         matching();
         Bundle bundle = getIntent().getExtras();
         Madanhmuc = bundle.getString("MaDanhMuc");
-        if(Madanhmuc.equals("Add")) {
+        if (Madanhmuc.equals("Add")) {
             tieude.setText("THÊM DANH MỤC");
 
-        }
-        else {
+        } else {
             tieude.setText("CHỈNH SỬA DANH MỤC");
             luu.setText("Lưu chỉnh sửa");
             load();
@@ -107,7 +110,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null) {
+        if (data != null) {
             uri = data.getData();
             test = uri.toString();
             Picasso.with(getApplication()).load(uri).into(hinhanh);
@@ -122,62 +125,79 @@ public class AddCategoryActivity extends AppCompatActivity {
         luu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Madanhmuc.equals("Add")) {
-                    if(!test.equals("") && !ten.getText().toString().trim().equals("")) {
+                if (Madanhmuc.equals("Add")) {
+                    if (!test.equals("") && !ten.getText().toString().trim().equals("")) {
                         reference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (uri == null) {
                                 } else {
-                                    int id = 0;
-                                    for (DataSnapshot data : snapshot.getChildren()) {
-                                        id = Integer.valueOf(data.getKey().substring(data.getKey().indexOf("-") + 1));
-                                    }
-                                    id++;
-                                    String formatID;
-                                    if (id < 10)
-                                        formatID = "DM-00000" + id;
-                                    else if (id < 100)
-                                        formatID = "DM-0000" + id;
-                                    else if (id < 1000)
-                                        formatID = "DM-000" + id;
-                                    else if (id < 10000)
-                                        formatID = "DM-00" + id;
-                                    else if (id < 100000)
-                                        formatID = "DM-0" + id;
-                                    else
-                                        formatID = "DM-" + id;
-
-                                    ContentResolver contentResolver = getContentResolver();
-                                    MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
-                                    StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
-                                    fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    AlertDialog.Builder mydialog = new AlertDialog.Builder(AddCategoryActivity.this);
+                                    mydialog.setTitle("Xác nhận");
+                                    mydialog.setMessage("Thêm danh mục?");
+                                    mydialog.setIcon(R.drawable.cauhoi);
+                                    mydialog.setPositiveButton("[THÊM]", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                @Override
-                                                public void onSuccess(Uri uri) {
-                                                    reference.child(formatID).child("Ten").setValue(ten.getText().toString().trim().toUpperCase());
-                                                    reference.child(formatID).child("HinhAnh").setValue(uri.toString());
-                                                    Toast.makeText(AddCategoryActivity.this, "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            int id = 0;
+                                            for (DataSnapshot data : snapshot.getChildren()) {
+                                                id = Integer.valueOf(data.getKey().substring(data.getKey().indexOf("-") + 1));
+                                            }
+                                            id++;
+                                            String formatID;
+                                            if (id < 10)
+                                                formatID = "DM-00000" + id;
+                                            else if (id < 100)
+                                                formatID = "DM-0000" + id;
+                                            else if (id < 1000)
+                                                formatID = "DM-000" + id;
+                                            else if (id < 10000)
+                                                formatID = "DM-00" + id;
+                                            else if (id < 100000)
+                                                formatID = "DM-0" + id;
+                                            else
+                                                formatID = "DM-" + id;
 
-                                                    Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
-                                                    intent.putExtra("idData", "DanhMuc");
-                                                    finish();
-                                                    startActivity(intent);
+                                            ContentResolver contentResolver = getContentResolver();
+                                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+                                            StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
+                                            fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                @Override
+                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                    taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                        @Override
+                                                        public void onSuccess(Uri uri) {
+                                                            reference.child(formatID).child("Ten").setValue(ten.getText().toString().trim().toUpperCase());
+                                                            reference.child(formatID).child("HinhAnh").setValue(uri.toString());
+                                                            Toast.makeText(AddCategoryActivity.this, "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
+
+                                                            Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
+                                                            intent.putExtra("idData", "DanhMuc");
+                                                            finish();
+                                                            startActivity(intent);
+                                                        }
+                                                    });
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(AddCategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                         }
-                                    }).addOnFailureListener(new OnFailureListener() {
+                                    });
+                                    mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+                                        @SuppressLint("WrongConstant")
                                         @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(AddCategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
                                         }
                                     });
+                                    AlertDialog alertDialog = mydialog.create();
+                                    alertDialog.show();
                                 }
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -190,44 +210,61 @@ public class AddCategoryActivity extends AppCompatActivity {
                     reference.child(Madanhmuc).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            HashMap<String, Object> hashMap = (HashMap<String, Object>) snapshot.getValue();
-                            if (test.equals("")) {
-                                reference.child(Madanhmuc).child("Ten").setValue(ten.getText().toString().toUpperCase().trim());
-                                Toast.makeText(AddCategoryActivity.this, "Đã lưu chỉnh sửa Danh Mục", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder mydialog = new AlertDialog.Builder(AddCategoryActivity.this);
+                            mydialog.setTitle("Xác nhận");
+                            mydialog.setMessage("Lưu chỉnh sửa danh mục?");
+                            mydialog.setIcon(R.drawable.cauhoi);
+                            mydialog.setPositiveButton("[LƯU]", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if (test.equals("")) {
+                                        reference.child(Madanhmuc).child("Ten").setValue(ten.getText().toString().toUpperCase().trim());
+                                        Toast.makeText(AddCategoryActivity.this, "Đã lưu chỉnh sửa Danh Mục", Toast.LENGTH_SHORT).show();
 
-                                Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
-                                intent.putExtra("idData", "DanhMuc");
-                                finish();
-                                startActivity(intent);
-                            } else {
-                                ContentResolver contentResolver = getContentResolver();
-                                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                                        Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
+                                        intent.putExtra("idData", "DanhMuc");
+                                        finish();
+                                        startActivity(intent);
+                                    } else {
+                                        ContentResolver contentResolver = getContentResolver();
+                                        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
-                                StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
-                                fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        StorageReference fileReference = khoAnh.child(System.currentTimeMillis() + "." + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)));
+                                        fileReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                             @Override
-                                            public void onSuccess(Uri uri) {
-                                                reference.child(Madanhmuc).child("Ten").setValue(ten.getText().toString().trim().toUpperCase());
-                                                reference.child(Madanhmuc).child("HinhAnh").setValue(uri.toString());
-                                                Toast.makeText(AddCategoryActivity.this, "Đã lưu chỉnh sửa Danh Mục", Toast.LENGTH_SHORT).show();
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        reference.child(Madanhmuc).child("Ten").setValue(ten.getText().toString().trim().toUpperCase());
+                                                        reference.child(Madanhmuc).child("HinhAnh").setValue(uri.toString());
+                                                        Toast.makeText(AddCategoryActivity.this, "Đã lưu chỉnh sửa Danh Mục", Toast.LENGTH_SHORT).show();
 
-                                                Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
-                                                intent.putExtra("idData", "DanhMuc");
-                                                finish();
-                                                startActivity(intent);
+                                                        Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
+                                                        intent.putExtra("idData", "DanhMuc");
+                                                        finish();
+                                                        startActivity(intent);
+                                                    }
+                                                });
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(AddCategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(AddCategoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+                                }
+                            });
+                            mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+                                @SuppressLint("WrongConstant")
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                            AlertDialog alertDialog = mydialog.create();
+                            alertDialog.show();
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {

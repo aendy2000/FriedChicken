@@ -48,15 +48,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_pf_hoten" />
 
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_avatar_profile"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
                 android:layout_marginTop="20dp"
+                android:src="@drawable/profileuser"
+                app:civ_border_color="#8F8F8F"
+                app:civ_border_width="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView23"
-                app:srcCompat="@drawable/profileuser" />
+                app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+            <ImageView
+                android:id="@+id/img_change_profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_avatar_profile"
+                app:layout_constraintEnd_toEndOf="@+id/img_avatar_profile"
+                app:srcCompat="@drawable/camera" />
 
             <EditText
                 android:id="@+id/et_pf_namsinh"
@@ -164,6 +174,40 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_pf_doimatkhau"
                 app:layout_constraintVertical_bias="1.0" />
 
+            <Button
+                android:id="@+id/btn_pf_huy"
+                android:layout_width="135dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#C62525"
+                android:text="HỦY"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.138"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_pf_doimatkhau"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <Button
+                android:id="@+id/btn_pf_luu"
+                android:layout_width="135dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#C62525"
+                android:text="LƯU"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.856"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_pf_doimatkhau"
+                app:layout_constraintVertical_bias="0.0" />
+
             <EditText
                 android:id="@+id/et_pf_email"
                 android:layout_width="290dp"
@@ -195,7 +239,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+                app:layout_constraintTop_toBottomOf="@+id/img_avatar_profile" />
 
             <EditText
                 android:id="@+id/et_pf_thang"

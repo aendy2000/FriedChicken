@@ -67,7 +67,19 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
             Xoa();
             Sua();
             changeAva();
+            Doimatkhau();
         }
+    }
+
+    private void Doimatkhau() {
+        doimk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent doiPass = new Intent(AccountDetailtUserActivity.this, DoipassActivity.class);
+                doiPass.putExtra("doiMk", ID);
+                startActivity(doiPass);
+            }
+        });
     }
 
     private void changeAva() {
@@ -116,7 +128,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                     mydialog.setTitle("Xác nhận");
                     mydialog.setMessage("Lưu thay đổi?");
                     mydialog.setIcon(R.drawable.cauhoi);
-                    mydialog.setPositiveButton("LƯU", new DialogInterface.OnClickListener() {
+                    mydialog.setPositiveButton("[LƯU]", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
@@ -248,7 +260,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                             });
                         }
                     });
-                    mydialog.setNegativeButton("QUAY LẠI", new DialogInterface.OnClickListener() {
+                    mydialog.setNegativeButton("[QUAY LẠI]", new DialogInterface.OnClickListener() {
                         @SuppressLint("WrongConstant")
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -270,7 +282,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                 mydialog.setTitle("Xác nhận");
                 mydialog.setMessage("Xóa tài khoản " + ID.substring(2) + "?");
                 mydialog.setIcon(R.drawable.cauhoi);
-                mydialog.setPositiveButton("XÓA", new DialogInterface.OnClickListener() {
+                mydialog.setPositiveButton("[XÓA]", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("TaiKhoan");
@@ -280,7 +292,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                         startActivity(new Intent(AccountDetailtUserActivity.this, AccountUserListManagerActivity.class));
                     }
                 });
-                mydialog.setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
+                mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
                     @SuppressLint("WrongConstant")
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -299,7 +311,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                     mydialog.setTitle("Xác nhận");
                     mydialog.setMessage("Xóa tài khoản " + ID.substring(2) + "?");
                     mydialog.setIcon(R.drawable.cauhoi);
-                    mydialog.setPositiveButton("XÓA", new DialogInterface.OnClickListener() {
+                    mydialog.setPositiveButton("[XÓA]", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("TaiKhoan");
@@ -309,7 +321,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                             startActivity(new Intent(AccountDetailtUserActivity.this, AccountAdminListManagerActivity.class));
                         }
                     });
-                    mydialog.setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
+                    mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
                         @SuppressLint("WrongConstant")
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -324,7 +336,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                     mydialog.setTitle("Xác nhận");
                     mydialog.setMessage("Hủy bỏ thay đổi?");
                     mydialog.setIcon(R.drawable.cauhoi);
-                    mydialog.setPositiveButton("HỦY BỎ", new DialogInterface.OnClickListener() {
+                    mydialog.setPositiveButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
@@ -340,7 +352,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    mydialog.setNegativeButton("QUAY LẠI", new DialogInterface.OnClickListener() {
+                    mydialog.setNegativeButton("[QUAY LẠI]", new DialogInterface.OnClickListener() {
                         @SuppressLint("WrongConstant")
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -399,7 +411,6 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
 
     private void matching() {
         doimk = (TextView) findViewById(R.id.tv_doimk_detailt_admin);
-        quenmk = (TextView) findViewById(R.id.tv_quenmk_detailt_admin);
         xoaUser = (Button) findViewById(R.id.btn_user_detailt_delete);
         xoaAd = (Button) findViewById(R.id.btn_admin_detailt_delete);
         sua = (Button) findViewById(R.id.btn_admin_detailt_edit);

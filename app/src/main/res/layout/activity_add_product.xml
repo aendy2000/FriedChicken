@@ -84,7 +84,7 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/category_background2"
                     android:ems="10"
-                    android:hint='Giá (Đơn vị "Nghìn")'
+                    android:hint="Giá sản phẩm"
                     android:inputType="numberSigned|number|numberDecimal"
                     android:minHeight="48dp"
                     android:paddingStart="12dp"

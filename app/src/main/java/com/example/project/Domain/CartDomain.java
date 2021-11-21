@@ -1,7 +1,6 @@
 package com.example.project.Domain;
 
 public class CartDomain {
-    private String danhmuc;
     private String mamonan;
     private String ten;
     private String gia;
@@ -10,8 +9,7 @@ public class CartDomain {
     private String hinhanh;
     private String iduser;
 
-    public CartDomain(String danhmuc, String mamonan, String ten, String gia, String tong, String soluong, String hinhanh, String iduser) {
-        this.danhmuc = danhmuc;
+    public CartDomain(String mamonan, String ten, String gia, String tong, String soluong, String hinhanh, String iduser) {
         this.mamonan = mamonan;
         this.ten = ten;
         this.gia = gia;
@@ -19,14 +17,6 @@ public class CartDomain {
         this.soluong = soluong;
         this.hinhanh = hinhanh;
         this.iduser = iduser;
-    }
-
-    public String getDanhmuc() {
-        return danhmuc;
-    }
-
-    public void setDanhmuc(String danhmuc) {
-        this.danhmuc = danhmuc;
     }
 
     public String getTen() {

@@ -1,10 +1,12 @@
 package com.example.project.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.project.Adapter.CheckOutAdapter;
+import com.example.project.Adapter.CheckoutlistAdapter;
 import com.example.project.Domain.CheckoutDomain;
+import com.example.project.Domain.CheckoutListDomain;
 import com.example.project.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,9 +36,8 @@ public class OrderDetailtOfCategoryManagerActivity extends AppCompatActivity {
     RecyclerView.Adapter adapterRecyclerCheckout;
     String ID, ndDonHang, maDonHang;
     TextView result, hoten, sdt, diachi;
-    String luuDanhmuc = "";
     ImageView cancel;
-    int sum;
+    NumberFormat format = new DecimalFormat("#,###");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +48,6 @@ public class OrderDetailtOfCategoryManagerActivity extends AppCompatActivity {
             return;
         }
         ID = extras.getString("idUser");
-        ndDonHang = extras.getString("ResultMaMonOrder");
         maDonHang = extras.getString("ngayMuaHang");
         getValue();
         Cancel();
@@ -58,12 +62,10 @@ public class OrderDetailtOfCategoryManagerActivity extends AppCompatActivity {
     }
 
     private void getValue() {
-        String[] maMonAn = ndDonHang.split("=");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerCheckout.setLayoutManager(linearLayoutManager);
         ArrayList<CheckoutDomain> checkOutlist = new ArrayList<>();
-        FirebaseDatabase databasegetfood = FirebaseDatabase.getInstance();
-        DatabaseReference referencegetfood = databasegetfood.getReference("DonHang");
+        DatabaseReference referencegetfood = FirebaseDatabase.getInstance().getReference("DonHang");
         referencegetfood.child("DH" + ID.split("K")[1]).child(maDonHang).child("ThongTin").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -78,62 +80,39 @@ public class OrderDetailtOfCategoryManagerActivity extends AppCompatActivity {
 
             }
         });
-        for (int i = 0; i < maMonAn.length; i++) {
-            referencegetfood.child("DH" + ID.split("K")[1]).child(maDonHang).child(maMonAn[i].split(";")[0]).child(maMonAn[i].split(";")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, Object> hashMap = (HashMap<String, Object>) snapshot.getValue();
-                    String danhmuc = "";
-                    if (snapshot.getKey().indexOf("MG") != -1)
-                        danhmuc = "MonGa";
-                    else if (snapshot.getKey().indexOf("CB") != -1)
-                        danhmuc = "ComBo";
-                    else if (snapshot.getKey().indexOf("AV") != -1)
-                        danhmuc = "AnVat";
-                    if (luuDanhmuc.indexOf(danhmuc) == -1)
-                        luuDanhmuc += danhmuc + ";";
-
-                    checkOutlist.add(new CheckoutDomain(snapshot.getKey(),
-                            hashMap.get("Ten").toString(),
-                            hashMap.get("Gia").toString(),
-                            hashMap.get("SoLuong").toString(),
-                            hashMap.get("Tong").toString(),
-                            hashMap.get("HinhAnh").toString(), ID));
-
-                    sum += Integer.valueOf(hashMap.get("Tong").toString().split("\\.")[0]);
-                    String sTonggia = "";
-                    if (sum < 1000) {
-                        sTonggia = sum + ".000 VND";
-                    } else if (sum < 10000) {
-                        String[] formatGia = String.valueOf(sum).split("");
-                        String chuoi = formatGia[1] + ".";
-                        for (int i = 2; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
-                    } else if (sum < 100000) {
-                        String[] formatGia = String.valueOf(sum).split("");
-                        String chuoi = formatGia[1] + formatGia[2] + ".";
-                        for (int i = 3; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
-                    } else if (sum < 1000000) {
-                        String[] formatGia = String.valueOf(sum).split("");
-                        String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
-                        for (int i = 4; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        sTonggia = chuoi + ".000 VND";
+        referencegetfood.child("DH" + ID.split("K")[1]).child(maDonHang).addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int tonggia = 0;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    String maMon = "";
+                    String ten = "";
+                    String gia = "";
+                    String sl = "";
+                    String tong = "";
+                    String hinhanh = "";
+                    if (data.getKey().indexOf("SP-") != -1) {
+                        HashMap<String, Object> hashMap = (HashMap<String, Object>) data.getValue();
+                        maMon = data.getKey();
+                        ten = hashMap.get("Ten").toString();
+                        gia = hashMap.get("Gia").toString();
+                        sl = hashMap.get("SoLuong").toString();
+                        tong = hashMap.get("Tong").toString();
+                        hinhanh = hashMap.get("HinhAnh").toString();
+                        tonggia += Integer.valueOf(hashMap.get("Tong").toString());
+                        checkOutlist.add(new CheckoutDomain(maMon, ten, gia, sl, tong, hinhanh, ID));
                     }
-                    result.setText(sTonggia);
-                    adapterRecyclerCheckout = new CheckOutAdapter(OrderDetailtOfCategoryManagerActivity.this, checkOutlist);
-                    recyclerCheckout.setAdapter(adapterRecyclerCheckout);
                 }
+                result.setText(format.format(tonggia));
+                adapterRecyclerCheckout = new CheckOutAdapter(OrderDetailtOfCategoryManagerActivity.this, checkOutlist);
+                recyclerCheckout.setAdapter(adapterRecyclerCheckout);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d("Loi", error.toString());
-                }
-            });
-        }
+            }
+        });
     }
 
     private void matching() {

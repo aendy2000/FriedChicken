@@ -23,13 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ListFoodActivity extends AppCompatActivity {
     TextView danhmuc;
     RecyclerView.Adapter adapterFood;
     RecyclerView recyclerViewfood;
     LinearLayout home, profile, donhang, support;
-    String sDanhMuc, ID;
+    String sDanhMuc, tendm, ID;
     ImageView cancel;
     FloatingActionButton btncart;
 
@@ -39,18 +40,12 @@ public class ListFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_food);
         matching();
         Bundle bundle = getIntent().getExtras();
-        if (bundle == null) {
-            return;
+        if (bundle != null) {
+            sDanhMuc = bundle.getString("Food");
+            tendm = bundle.getString("DanhMuc");
+            ID = bundle.getString("idUser");
+            danhmuc.setText(sDanhMuc);
         }
-        sDanhMuc = bundle.getString("Food");
-        ID = bundle.getString("idUse");
-        danhmuc.setText(sDanhMuc);
-        if (sDanhMuc.equals("COMBO"))
-            sDanhMuc = "ComBo";
-        else if (sDanhMuc.equals("MÓN GÀ"))
-            sDanhMuc = "MonGa";
-        else if (sDanhMuc.equals("MÓN ĂN VẶT"))
-            sDanhMuc = "AnVat";
         Home();
         recyclerViewCategory();
         Profile();
@@ -59,6 +54,7 @@ public class ListFoodActivity extends AppCompatActivity {
         Donhang();
         Support();
     }
+
     private void Support() {
         support.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +65,7 @@ public class ListFoodActivity extends AppCompatActivity {
             }
         });
     }
+
     private void Donhang() {
         donhang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +76,7 @@ public class ListFoodActivity extends AppCompatActivity {
             }
         });
     }
+
     private void cart() {
         btncart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,18 +125,17 @@ public class ListFoodActivity extends AppCompatActivity {
         ArrayList<FoodDomain> foodList = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("SanPham");
-        reference.child(sDanhMuc).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot record : snapshot.getChildren()) {
-                    record.getValue();
-                    String key = record.getKey();
-                    String[] tachND = record.toString().split(",");
-                    foodList.add(new FoodDomain(record.getKey().toString(),
-                            tachND[3].substring(5),
-                            tachND[2].substring(6),
-                            tachND[4].substring(5, tachND[4].length() - 3),
-                            tachND[1].substring(18), ID));
+                    HashMap<String, Object> hashMap = (HashMap<String, Object>) record.getValue();
+                    if (hashMap.get("DanhMuc").toString().equals(sDanhMuc))
+                        foodList.add(new FoodDomain(record.getKey(),
+                                hashMap.get("Ten").toString(),
+                                hashMap.get("MoTa").toString(),
+                                hashMap.get("Gia").toString(),
+                                hashMap.get("HinhAnh").toString(), ID));
                 }
                 adapterFood = new FoodAdapter(ListFoodActivity.this, foodList);
                 recyclerViewfood.setAdapter(adapterFood);

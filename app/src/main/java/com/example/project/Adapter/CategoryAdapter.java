@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.project.Activity.ListFoodActivity;
 import com.example.project.Domain.CategoryDomain;
 import com.example.project.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -40,13 +41,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CategoryDomain categoryDomain = categoryDomains.get(position);
-        holder.categoryName.setText(categoryDomains.get(position).getTitle());
-        String picUrl = categoryDomain.getPic();
-        int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(picUrl, "drawable", holder.itemView.getContext().getPackageName());
 
-        Glide.with(holder.itemView.getContext())
-                .load(drawableResourceId)
-                .into(holder.categoryPic);
+        holder.categoryName.setText(categoryDomains.get(position).getTitle());
+        Picasso.with(myContex).load(categoryDomain.getPic()).into(holder.categoryPic);
         if(position % 2 == 0)
             holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.category_background3));
         else
@@ -55,20 +52,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickGoToDetailt(categoryDomain);
+                Intent intent = new Intent(myContex, ListFoodActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Food", categoryDomain.getIdDm());
+                bundle.putSerializable("DanhMuc", categoryDomain.getTitle());
+                bundle.putSerializable("idUser", categoryDomain.getUserID());
+                intent.putExtras(bundle);
+                myContex.startActivity(intent);
             }
         });
     }
-
-    private void onClickGoToDetailt(CategoryDomain categoryDomain) {
-        Intent intent = new Intent(myContex, ListFoodActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Food", categoryDomain.getTitle());
-        bundle.putSerializable("idUse", categoryDomain.getUserID());
-        intent.putExtras(bundle);
-        myContex.startActivity(intent);
-    }
-
 
     @Override
     public int getItemCount() {

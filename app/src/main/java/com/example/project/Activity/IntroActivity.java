@@ -39,7 +39,7 @@ public class IntroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("TaiKhoan");
-                ID = "TK" + taikhoan.getText().toString().trim();
+                ID = "TK" + taikhoan.getText().toString().trim().toUpperCase();
                 reference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -59,7 +59,6 @@ public class IntroActivity extends AppCompatActivity {
                                         login.putExtra("nameUser", hashMap.get("Ten").toString().trim());
                                         startActivity(login);
                                     }
-
                                 } else {
                                     Toast.makeText(IntroActivity.this, "Mật khẩu đăng nhập không đúng!\nvui lòng kiểm tra lại", Toast.LENGTH_LONG).show();
                                 }

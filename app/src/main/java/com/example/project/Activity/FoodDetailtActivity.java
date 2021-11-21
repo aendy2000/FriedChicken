@@ -1,10 +1,17 @@
 package com.example.project.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.DecimalFormat;
+import android.icu.text.NumberFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,19 +28,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class FoodDetailtActivity extends AppCompatActivity {
 
     TextView ten, mota, gia, tong, soluong, hinhanh;
     Button addtocart;
     ImageView cancel, imgFood, cong, tru;
-    String sMonAn, ID, danhmuc;
+    String sMonAn, ID;
     LinearLayout home, profile, donhang, support;
     FloatingActionButton btncart;
+    NumberFormat formatter = new DecimalFormat("#,###");
+    int Gia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +52,11 @@ public class FoodDetailtActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food_detailt);
         matching();
         Bundle bundle = getIntent().getExtras();
-        if (bundle == null) {
-            return;
+        if (bundle != null) {
+            sMonAn = bundle.getString("Food");
+            ID = bundle.getString("idUser");
         }
-        sMonAn = bundle.getString("Food");
-        danhmuc = bundle.getString("Food").split("")[1] + bundle.getString("Food").split("")[2];
-        ID = bundle.getString("idUser");
-        if (danhmuc.equals("CB"))
-            danhmuc = "ComBo";
-        else if (danhmuc.equals("MG"))
-            danhmuc = "MonGa";
-        else if (danhmuc.equals("AV"))
-            danhmuc = "AnVat";
+
         load();
         tangsl();
         giamsl();
@@ -164,64 +168,62 @@ public class FoodDetailtActivity extends AppCompatActivity {
     private void addGioHang(String Magiohang) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("GioHang");
-        reference.child(Magiohang).child(danhmuc).child(sMonAn).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                try {
-                    HashMap<String, Object> hashMapGioHang = (HashMap<String, Object>) snapshot.getValue();
-                    if (hashMapGioHang == null) {
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("Gia").setValue(gia.getText().toString());
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("Ten").setValue(ten.getText().toString());
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("SoLuong").setValue(soluong.getText().toString());
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("Tong").setValue(tong.getText().toString());
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("HinhAnh").setValue(hinhanh.getText().toString());
-                    } else {
 
-                        int tongsl = Integer.valueOf(soluong.getText().toString()) + Integer.valueOf(hashMapGioHang.get("SoLuong").toString());
-                        int tonggia = Integer.valueOf(gia.getText().toString().trim().split("\\.")[0]) * tongsl;
-                        String sTonggia = "";
-                        if (tonggia < 1000) {
-                            sTonggia = tonggia + ".000 VND";
-                        } else if (tonggia < 10000) {
-                            String[] formatGia = String.valueOf(tonggia).split("");
-                            String chuoi = formatGia[1] + ".";
-                            for (int i = 2; i < formatGia.length; i++)
-                                chuoi += formatGia[i];
-                            sTonggia = chuoi + ".000 VND";
-                        } else if (tonggia < 100000) {
-                            String[] formatGia = String.valueOf(tonggia).split("");
-                            String chuoi = formatGia[1] + formatGia[2] + ".";
-                            for (int i = 3; i < formatGia.length; i++)
-                                chuoi += formatGia[i];
-                            sTonggia = chuoi + ".000 VND";
-                        } else if (tonggia < 1000000) {
-                            String[] formatGia = String.valueOf(tonggia).split("");
-                            String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
-                            for (int i = 4; i < formatGia.length; i++)
-                                chuoi += formatGia[i];
-                            sTonggia = chuoi + ".000 VND";
+        AlertDialog.Builder mydialog = new AlertDialog.Builder(FoodDetailtActivity.this);
+        mydialog.setTitle("Xác nhận");
+        mydialog.setMessage("Thêm sản phẩm vào giỏ hàng?");
+        mydialog.setIcon(R.drawable.cauhoi);
+        mydialog.setPositiveButton("[THÊM]", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                reference.child(Magiohang).child(sMonAn).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        try {
+                            HashMap<String, Object> hashMapGioHang = (HashMap<String, Object>) snapshot.getValue();
+                            if (hashMapGioHang == null) {
+                                reference.child(Magiohang).child(sMonAn).child("Gia").setValue(String.valueOf(Gia));
+                                reference.child(Magiohang).child(sMonAn).child("Ten").setValue(ten.getText().toString());
+                                reference.child(Magiohang).child(sMonAn).child("SoLuong").setValue(soluong.getText().toString());
+                                int tong = Gia * Integer.valueOf(soluong.getText().toString());
+                                reference.child(Magiohang).child(sMonAn).child("Tong").setValue(String.valueOf(tong));
+                                reference.child(Magiohang).child(sMonAn).child("HinhAnh").setValue(hinhanh.getText().toString());
+                            } else {
+
+                                int tongsl = Integer.valueOf(soluong.getText().toString()) + Integer.valueOf(hashMapGioHang.get("SoLuong").toString());
+                                int tonggia = Gia * tongsl;
+                                reference.child(Magiohang).child(sMonAn).child("Gia").setValue(Gia);
+                                reference.child(Magiohang).child(sMonAn).child("Ten").setValue(ten.getText().toString());
+                                reference.child(Magiohang).child(sMonAn).child("SoLuong").setValue(String.valueOf(tongsl));
+                                reference.child(Magiohang).child(sMonAn).child("Tong").setValue(String.valueOf(tonggia));
+                                reference.child(Magiohang).child(sMonAn).child("HinhAnh").setValue(hinhanh.getText().toString());
+                            }
+                            Toast.makeText(FoodDetailtActivity.this, "Đã thêm " + ten.getText().toString() + " vào giỏ hàng!", Toast.LENGTH_LONG).show();
+                            Intent Cart = new Intent(FoodDetailtActivity.this, CartActivity.class);
+                            Cart.putExtra("idUser", ID);
+                            startActivity(Cart);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("Gia").setValue(gia.getText().toString());
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("Ten").setValue(ten.getText().toString());
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("SoLuong").setValue(String.valueOf(tongsl));
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("Tong").setValue(sTonggia);
-                        reference.child(Magiohang).child(danhmuc).child(sMonAn).child("HinhAnh").setValue(hinhanh.getText().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
-                    Toast.makeText(FoodDetailtActivity.this, "Đã thêm " + ten.getText().toString() + " vào giỏ hàng!", Toast.LENGTH_LONG).show();
-                    Intent Cart = new Intent(FoodDetailtActivity.this, CartActivity.class);
-                    Cart.putExtra("idUser", ID);
-                    startActivity(Cart);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+                });
             }
         });
+        mydialog.setNegativeButton("[HỦY BỎ]", new DialogInterface.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        AlertDialog alertDialog = mydialog.create();
+        alertDialog.show();
+
     }
 
     private void tangsl() {
@@ -231,29 +233,9 @@ public class FoodDetailtActivity extends AppCompatActivity {
                 Integer sl = Integer.valueOf(soluong.getText().toString().trim());
                 if (sl < 100) {
                     sl++;
-                    Integer Tong = Integer.valueOf(gia.getText().toString().trim().split("\\.")[0]) * sl;
-                    if (Tong < 1000) {
-                        tong.setText(Tong + ".000 VND");
-                    } else if (Tong < 10000) {
-                        String[] formatGia = Tong.toString().split("");
-                        String chuoi = formatGia[1] + ".";
-                        for (int i = 2; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        tong.setText(chuoi + ".000 VND");
-                    } else if (Tong < 100000) {
-                        String[] formatGia = Tong.toString().split("");
-                        String chuoi = formatGia[1] + formatGia[2] + ".";
-                        for (int i = 3; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        tong.setText(chuoi + ".000 VND");
-                    } else if (Tong < 1000000) {
-                        String[] formatGia = Tong.toString().split("");
-                        String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
-                        for (int i = 4; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        tong.setText(chuoi + ".000 VND");
-                    }
-                    soluong.setText(sl + "");
+                    int Tong = Integer.valueOf(Gia) * sl;
+                    tong.setText(String.valueOf(formatter.format(Tong)) + " VND");
+                    soluong.setText(String.valueOf(sl));
                 } else {
                     Toast.makeText(FoodDetailtActivity.this, "Số lượng không quá 100", Toast.LENGTH_LONG).show();
                 }
@@ -268,29 +250,9 @@ public class FoodDetailtActivity extends AppCompatActivity {
                 Integer sl = Integer.valueOf(soluong.getText().toString().trim());
                 if (sl > 1) {
                     sl--;
-                    Integer Tong = Integer.valueOf(gia.getText().toString().trim().split("\\.")[0]) * sl;
-                    if (Tong < 1000) {
-                        tong.setText(Tong + ".000 VND");
-                    } else if (Tong < 10000) {
-                        String[] formatGia = Tong.toString().split("");
-                        String chuoi = formatGia[1] + ".";
-                        for (int i = 2; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        tong.setText(chuoi + ".000 VND");
-                    } else if (Tong < 100000) {
-                        String[] formatGia = Tong.toString().split("");
-                        String chuoi = formatGia[1] + formatGia[2] + ".";
-                        for (int i = 3; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        tong.setText(chuoi + ".000 VND");
-                    } else if (Tong < 1000000) {
-                        String[] formatGia = Tong.toString().split("");
-                        String chuoi = formatGia[1] + formatGia[2] + formatGia[3] + ".";
-                        for (int i = 4; i < formatGia.length; i++)
-                            chuoi += formatGia[i];
-                        tong.setText(chuoi + ".000 VND");
-                    }
-                    soluong.setText(sl + "");
+                    int Tong = Integer.valueOf(Gia) * sl;
+                    tong.setText(String.valueOf(formatter.format(Tong)) + " VND");
+                    soluong.setText(String.valueOf(sl));
                 } else {
                     Toast.makeText(FoodDetailtActivity.this, "Số lượng không bé hơn 1", Toast.LENGTH_LONG).show();
                 }
@@ -301,17 +263,18 @@ public class FoodDetailtActivity extends AppCompatActivity {
     private void load() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference("SanPham");
-        reference.child(danhmuc).child(sMonAn).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(sMonAn).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String, Object> hashMap = (HashMap<String, Object>) snapshot.getValue();
                 ten.setText(hashMap.get("Ten").toString().trim());
                 mota.setText(hashMap.get("MoTa").toString().trim());
-                gia.setText(hashMap.get("Gia").toString().trim());
-                imgFood.setImageResource(getResources().getIdentifier(hashMap.get("HinhAnh").toString().trim(), "drawable", getPackageName()));
+                Gia = Integer.valueOf(hashMap.get("Gia").toString().trim());
+                gia.setText(formatter.format(Integer.valueOf(hashMap.get("Gia").toString().trim())) + " VND");
+                Picasso.with(FoodDetailtActivity.this).load(hashMap.get("HinhAnh").toString()).into(imgFood);
                 hinhanh.setText(hashMap.get("HinhAnh").toString().trim());
                 soluong.setText("1");
-                tong.setText(hashMap.get("Gia").toString().trim());
+                tong.setText(formatter.format(Integer.valueOf(hashMap.get("Gia").toString().trim())) + " VND");
             }
 
             @Override

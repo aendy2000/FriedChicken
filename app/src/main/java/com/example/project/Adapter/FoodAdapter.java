@@ -2,6 +2,9 @@ package com.example.project.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.DecimalFormat;
+import android.icu.text.NumberFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,13 +21,15 @@ import com.bumptech.glide.Glide;
 import com.example.project.Activity.FoodDetailtActivity;
 import com.example.project.Domain.FoodDomain;
 import com.example.project.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
     ArrayList<FoodDomain> listFood;
     Context myContex;
-
+    NumberFormat formatter = new DecimalFormat("#,###");
     public FoodAdapter(Context context, ArrayList<FoodDomain> listFood) {
         this.listFood = listFood;
         this.myContex = context;
@@ -45,28 +51,20 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
         holder.ten.setText(foodDomain.getName());
         holder.mota.setText(foodDomain.getMota());
-        holder.gia.setText(foodDomain.getGia());
-
-        int drawableResourceId = holder.itemView.getContext().getResources().getIdentifier(foodDomain.getImgFood(), "drawable", holder.itemView.getContext().getPackageName());
-        Glide.with(holder.itemView.getContext())
-                .load(drawableResourceId)
-                .into(holder.imgFood);
+        holder.gia.setText(formatter.format(Integer.valueOf(foodDomain.getGia())));
+        Picasso.with(myContex).load(foodDomain.getImgFood()).into(holder.imgFood);
 
         holder.foodList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickGoToDetailtFood(foodDomain);
+                Intent intent = new Intent(myContex.getApplicationContext(), FoodDetailtActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Food", foodDomain.getMamonan());
+                bundle.putSerializable("idUser", foodDomain.getUserID());
+                intent.putExtras(bundle);
+                myContex.startActivity(intent);
             }
         });
-    }
-
-    private void onClickGoToDetailtFood(FoodDomain foodDomain) {
-        Intent intent = new Intent(myContex.getApplicationContext(), FoodDetailtActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Food", foodDomain.getMamonan());
-        bundle.putSerializable("idUser", foodDomain.getUserID());
-        intent.putExtras(bundle);
-        myContex.startActivity(intent);
     }
 
     @Override
