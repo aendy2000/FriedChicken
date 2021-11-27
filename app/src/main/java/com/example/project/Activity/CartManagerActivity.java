@@ -28,6 +28,7 @@ public class CartManagerActivity extends AppCompatActivity {
     RecyclerView.Adapter cartmanagerAdapter;
     RecyclerView cartmanager;
     ImageView cancel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +65,12 @@ public class CartManagerActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int i = 0;
-                for (DataSnapshot record: snapshot.getChildren()){
+                for (DataSnapshot record : snapshot.getChildren()) {
                     for (DataSnapshot value : snapshot.child(record.getKey()).getChildren()) {
-                        HashMap<String, Object> hashMap = (HashMap<String, Object>) value.getValue();
                         i++;
                     }
                     cartlist.add(new CartManagerDomain(record.getKey(), String.valueOf(i)));
+                    i = 0;
                 }
                 cartmanagerAdapter = new CartManagerAdapter(CartManagerActivity.this, cartlist);
                 cartmanager.setAdapter(cartmanagerAdapter);

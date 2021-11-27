@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.project.Adapter.CategoryAdapter;
 import com.example.project.Domain.CategoryDomain;
@@ -31,12 +34,15 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton btncart;
     String ID;
     TextView name;
+    ImageView tim;
+    EditText keySearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         name = findViewById(R.id.tv_tenUser);
+        keySearch = (EditText) findViewById(R.id.et_search_sanpham_main);
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             return;
@@ -48,6 +54,26 @@ public class MainActivity extends AppCompatActivity {
         cart();
         Donhang();
         Support();
+        Timkiem();
+    }
+
+    private void Timkiem() {
+        tim = (ImageView) findViewById(R.id.img_timkiem_pro_main);
+        tim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!keySearch.getText().toString().trim().equals("")) {
+                    Intent intent = new Intent(MainActivity.this, ListFoodActivity.class);
+                    intent.putExtra("keySearch", keySearch.getText().toString().trim());
+                    intent.putExtra("idUser", ID);
+                    intent.putExtra("Food", "DataNull");
+                    intent.putExtra("DanhMuc", keySearch.getText().toString().trim());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "Vui lòng nhập tên món ăn cần tìm", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void Support() {

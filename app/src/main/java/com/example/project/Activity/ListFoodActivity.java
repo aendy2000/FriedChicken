@@ -32,7 +32,7 @@ public class ListFoodActivity extends AppCompatActivity {
     RecyclerView.Adapter adapterFood;
     RecyclerView recyclerViewfood;
     LinearLayout home, profile, donhang, support;
-    String sDanhMuc, tendm, ID;
+    String sDanhMuc, ID, search;
     ImageView cancel;
     FloatingActionButton btncart;
 
@@ -44,22 +44,9 @@ public class ListFoodActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             sDanhMuc = bundle.getString("Food");
-            tendm = bundle.getString("DanhMuc");
             ID = bundle.getString("idUser");
-            DatabaseReference loadDM = FirebaseDatabase.getInstance().getReference("DanhMuc");
-            loadDM.child(sDanhMuc).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    HashMap<String, Object> hashMap = (HashMap<String, Object>) snapshot.getValue();
-                    danhmuc.setText(hashMap.get("Ten").toString());
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
+            danhmuc.setText(bundle.getString("DanhMuc"));
+            search = bundle.getString("keySearch");
         }
         Home();
         recyclerViewCategory();
@@ -144,17 +131,32 @@ public class ListFoodActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot record : snapshot.getChildren()) {
-                    HashMap<String, Object> hashMap = (HashMap<String, Object>) record.getValue();
-                    if (hashMap.get("DanhMuc").toString().equals(sDanhMuc))
-                        foodList.add(new FoodDomain(record.getKey(),
-                                hashMap.get("Ten").toString(),
-                                hashMap.get("MoTa").toString(),
-                                hashMap.get("Gia").toString(),
-                                hashMap.get("HinhAnh").toString(), ID));
+                if (search.equals("KeyNull")) {
+                    for (DataSnapshot record : snapshot.getChildren()) {
+                        HashMap<String, Object> hashMap = (HashMap<String, Object>) record.getValue();
+                        if (hashMap.get("DanhMuc").toString().equals(sDanhMuc))
+                            foodList.add(new FoodDomain(record.getKey(),
+                                    hashMap.get("Ten").toString(),
+                                    hashMap.get("MoTa").toString(),
+                                    hashMap.get("Gia").toString(),
+                                    hashMap.get("HinhAnh").toString(), ID));
+                    }
+                    adapterFood = new FoodAdapter(ListFoodActivity.this, foodList);
+                    recyclerViewfood.setAdapter(adapterFood);
+                } else {
+                    for (DataSnapshot record : snapshot.getChildren()) {
+                        HashMap<String, Object> hashMap = (HashMap<String, Object>) record.getValue();
+                        if (hashMap.get("Ten").toString().toUpperCase().contains(search.toUpperCase()))
+                            foodList.add(new FoodDomain(record.getKey(),
+                                    hashMap.get("Ten").toString(),
+                                    hashMap.get("MoTa").toString(),
+                                    hashMap.get("Gia").toString(),
+                                    hashMap.get("HinhAnh").toString(), ID));
+                    }
+                    adapterFood = new FoodAdapter(ListFoodActivity.this, foodList);
+                    recyclerViewfood.setAdapter(adapterFood);
                 }
-                adapterFood = new FoodAdapter(ListFoodActivity.this, foodList);
-                recyclerViewfood.setAdapter(adapterFood);
+
             }
 
             @Override

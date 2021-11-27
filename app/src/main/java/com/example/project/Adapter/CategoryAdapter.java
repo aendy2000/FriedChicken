@@ -44,7 +44,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         holder.categoryName.setText(categoryDomains.get(position).getTitle());
         Picasso.with(myContex).load(categoryDomain.getPic()).into(holder.categoryPic);
-        if(position % 2 == 0)
+        if (position % 2 == 0)
             holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.category_background3));
         else
             holder.mainLayout.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.category_background2));
@@ -57,6 +57,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 bundle.putSerializable("Food", categoryDomain.getIdDm());
                 bundle.putSerializable("DanhMuc", categoryDomain.getTitle());
                 bundle.putSerializable("idUser", categoryDomain.getUserID());
+                bundle.putSerializable("keySearch", "KeyNull");
                 intent.putExtras(bundle);
                 myContex.startActivity(intent);
             }

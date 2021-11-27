@@ -17,15 +17,19 @@
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_checkout.xml" value="0.334375" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_dangky.xml" value="0.2" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_doipass.xml" value="0.33" />
+        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_food_detailt.xml" value="0.3625" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_intro.xml" value="0.25" />
-        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_main.xml" value="0.2168918918918919" />
+        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_list_food.xml" value="0.3588628762541806" />
+        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_list_order.xml" value="0.3588628762541806" />
+        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_main_admin.xml" value="0.2168918918918919" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_order_detailt.xml" value="0.33229166666666665" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_order_detailt_manager.xml" value="0.33229166666666665" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_order_detailt_of_category_manager.xml" value="0.33229166666666665" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_order_manager.xml" value="0.3601351351351351" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_product_manager.xml" value="0.33229166666666665" />
-        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_profile.xml" value="0.33" />
+        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/activity_profile.xml" value="0.25" />
+        <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/app/src/main/res/layout/viewholder_list_cat.xml" value="0.1486111111111111" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/activity_cart.xml" value="0.25" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/activity_cart_manager.xml" value="0.33" />
         <entry key="..\:/Data_D/Bài học/Năm 3 - HK1/Mobile/ProjectTeam/FriedChicken/project/app/src/main/res/layout/activity_cart_manager_detailt.xml" value="0.33" />

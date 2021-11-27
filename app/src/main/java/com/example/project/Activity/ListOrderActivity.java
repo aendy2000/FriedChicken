@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.project.Adapter.CheckoutlistAdapter;
 import com.example.project.Domain.CheckoutListDomain;
@@ -28,10 +31,12 @@ public class ListOrderActivity extends AppCompatActivity {
 
     RecyclerView listOrder;
     RecyclerView.Adapter adapterListOrder;
-    ImageView cancel;
+    ImageView cancel, search;
     LinearLayout home, profile, support;
     FloatingActionButton btncart;
-    String ID;
+    String ID, IdSearch = "";
+    EditText keysearch;
+    TextView tieude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,13 @@ public class ListOrderActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             ID = extras.getString("idUser");
+            if (ID.contains("-")) {
+                IdSearch = ID.split("-")[1];
+                ID = ID.split("-")[0];
+                tieude.setText("Đơn ngày " + IdSearch.substring(0, 2)
+                        + "/" + IdSearch.substring(2, 4)
+                        + "/20" + IdSearch.substring(4, 6));
+            }
         }
         show();
         Home();
@@ -48,6 +60,52 @@ public class ListOrderActivity extends AppCompatActivity {
         cart();
         quaylai();
         Support();
+        Timkiem();
+    }
+
+    private void Timkiem() {
+        search = (ImageView) findViewById(R.id.img_timkiem_donhang_user);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String time = keysearch.getText().toString().trim();
+                if (!time.equals("")) {
+                    if (time.contains("-")) {
+                        String[] tach = time.split("-");
+                        if (tach.length != 3) {
+                            Toast.makeText(ListOrderActivity.this, "Nội dung tìm kiếm phải là Ngày-Tháng-Năm\nVD: 25-03-2021", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (tach[2].length() != 4 || tach[1].length() > 2 || tach[0].length() > 2) {
+                                Toast.makeText(ListOrderActivity.this, "Nội dung tìm kiếm phải là Ngày-Tháng-Năm\nVD: 25-03-2021", Toast.LENGTH_SHORT).show();
+                            } else {
+                                String iddonhang = "";
+                                if (tach[0].length() < 2)
+                                    iddonhang += "0" + tach[0];
+                                else
+                                    iddonhang += tach[0];
+
+                                if (tach[1].length() < 2)
+                                    iddonhang += "0" + tach[1];
+                                else
+                                    iddonhang += tach[1];
+                                iddonhang += tach[2].substring(2);
+                                Intent intent = new Intent(ListOrderActivity.this, ListOrderActivity.class);
+                                intent.putExtra("idUser", ID + "-" + iddonhang);
+                                finish();
+                                startActivity(intent);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(ListOrderActivity.this, "Nội dung tìm kiếm phải là Ngày-Tháng-Năm\nVD: 25-03-2021", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Intent intent = new Intent(ListOrderActivity.this, ListOrderActivity.class);
+                    intent.putExtra("idUser", ID);
+                    finish();
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void Support() {
@@ -66,111 +124,82 @@ public class ListOrderActivity extends AppCompatActivity {
         listOrder.setLayoutManager(linearLayoutManager);
         ArrayList<CheckoutListDomain> cartlist = new ArrayList<>();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("DonHang");
-
-        reference.child("DH" + ID.split("K")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot != null) {
-                    for (DataSnapshot data : snapshot.getChildren()) {
-                        String maMon = "";
-                        String trangthai = "";
-                        String somon = "";
-                        String tongcong = "";
-                        String maDH = "";
-                        for (DataSnapshot value : snapshot.child(data.getKey()).getChildren()) {
-                            HashMap<String, Object> hashMap = (HashMap<String, Object>) value.getValue();
-                            if (value.getKey().indexOf("SP") != -1) {
-                                maDH = data.getKey();
-                                maMon = value.getKey();
-                            } else if (value.getKey().equals("TrangThai")) {
-                                trangthai = hashMap.get("Trangthai").toString();
-                            } else if (value.getKey().equals("SoMon")) {
-                                somon = hashMap.get("Somon").toString();
-                            } else if (value.getKey().equals("TongCong")) {
-                                tongcong = hashMap.get("Tongcong").toString();
+        if (IdSearch.equals("")) {
+            reference.child("DH" + ID.split("K")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot != null) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            String maMon = "";
+                            String trangthai = "";
+                            String somon = "";
+                            String tongcong = "";
+                            String maDH = "";
+                            for (DataSnapshot value : snapshot.child(data.getKey()).getChildren()) {
+                                HashMap<String, Object> hashMap = (HashMap<String, Object>) value.getValue();
+                                if (value.getKey().indexOf("SP") != -1) {
+                                    maDH = data.getKey();
+                                    maMon = value.getKey();
+                                } else if (value.getKey().equals("TrangThai")) {
+                                    trangthai = hashMap.get("Trangthai").toString();
+                                } else if (value.getKey().equals("SoMon")) {
+                                    somon = hashMap.get("Somon").toString();
+                                } else if (value.getKey().equals("TongCong")) {
+                                    tongcong = hashMap.get("Tongcong").toString();
+                                }
                             }
+                            cartlist.add(new CheckoutListDomain(maMon, ID, somon, maDH, trangthai, tongcong));
+                            adapterListOrder = new CheckoutlistAdapter(ListOrderActivity.this, cartlist);
+                            listOrder.setAdapter(adapterListOrder);
                         }
-                        cartlist.add(new CheckoutListDomain(maMon, ID, somon, maDH, trangthai, tongcong));
-                        adapterListOrder = new CheckoutlistAdapter(ListOrderActivity.this, cartlist);
-                        listOrder.setAdapter(adapterListOrder);
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        } else {
+            reference.child("DH" + ID.split("K")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot != null) {
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            String maMon = "";
+                            String trangthai = "";
+                            String somon = "";
+                            String tongcong = "";
+                            String maDH = "";
+                            if (data.getKey().toUpperCase().contains(IdSearch.toUpperCase())) {
+                                for (DataSnapshot value : snapshot.child(data.getKey()).getChildren()) {
+                                    HashMap<String, Object> hashMap = (HashMap<String, Object>) value.getValue();
+                                    if (value.getKey().indexOf("SP") != -1) {
+                                        maDH = data.getKey();
+                                        maMon = value.getKey();
+                                    } else if (value.getKey().equals("TrangThai")) {
+                                        trangthai = hashMap.get("Trangthai").toString();
+                                    } else if (value.getKey().equals("SoMon")) {
+                                        somon = hashMap.get("Somon").toString();
+                                    } else if (value.getKey().equals("TongCong")) {
+                                        tongcong = hashMap.get("Tongcong").toString();
+                                    }
+                                }
+                                cartlist.add(new CheckoutListDomain(maMon, ID, somon, maDH, trangthai, tongcong));
+                                adapterListOrder = new CheckoutlistAdapter(ListOrderActivity.this, cartlist);
+                                listOrder.setAdapter(adapterListOrder);
+                            }
+                        }
+                    }
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-//        reference.child("DH" + ID.split("K")[1]).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.getValue() == null) {
-//
-//                } else {
-//                    String key = snapshot.getValue().toString();
-//                    String maDH;
-//                    String soMon;
-//                    String trangThai;
-//                    String tongCong;
-//                    String danhmuc;
-//                    String maMon;
-//
-//                    String[] tach = key.split("[|]");
-//                    for (int i = 1; i < tach.length; i++) {
-//                        maDH = "";
-//                        soMon = "";
-//                        trangThai = "";
-//                        tongCong = "";
-//                        maMon = "";
-//
-//                        maDH = tach[i].split("SoMon")[0].substring(0, tach[i].indexOf("SoMon") - 2);
-//                        soMon = tach[i].split("SoMon")[1].substring(1, tach[i].split("SoMon")[1].indexOf("món") + 3);
-//                        if (tach[i].indexOf("MonGa") != -1) {
-//                            String[] mamonMG = tach[i].split("MG");
-//                            for (int j = 1; j < mamonMG.length; j++) {
-//                                maMon+= "MonGa;MG" + mamonMG[j].substring(0, 10) + ";";
-//                            }
-//                        }
-//                        if (tach[i].indexOf("ComBo") != -1) {
-//                            String[] mamonCB = tach[i].split("CB");
-//                            for (int k = 1; k < mamonCB.length; k++) {
-//                                maMon+= "ComBo;CB" + mamonCB[k].substring(0, 10) + ";";
-//                            }
-//                        }
-//                        if (tach[i].indexOf("AnVat") != -1) {
-//                            String[] mamonCB = tach[i].split("AV");
-//                            for (int l = 1; l < mamonCB.length; l++) {
-//                                maMon+= "AnVat;AV" + mamonCB[l].substring(0, 10) + ";";
-//                            }
-//                        }
-//                        if (tach[i].indexOf("Chờ duyệt") != -1)
-//                            trangThai = "Chờ duyệt";
-//                        else if (tach[i].indexOf("Đã duyệt") != -1)
-//                            trangThai = "Đã duyệt";
-//                        else if (tach[i].indexOf("Đang giao") != -1)
-//                            trangThai = "Đang giao";
-//                        else if (tach[i].indexOf("Đã giao") != -1)
-//                            trangThai = "Đã giao";
-//                        else if (tach[i].indexOf("Không thể giao") != -1)
-//                            trangThai = "Không thể giao";
-//                        else if (tach[i].indexOf("Đã hủy") != -1)
-//                            trangThai = "Đã hủy";
-//                        tongCong = tach[i].split("TongCong")[1].substring(1, tach[i].split("TongCong")[1].indexOf("VND") + 3);
-//                        cartlist.add(new CheckoutListDomain(maMon, ID, soMon, maDH, trangThai, tongCong));
+                }
+            });
+        }
 
-//
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
     }
 
 
@@ -245,6 +274,8 @@ public class ListOrderActivity extends AppCompatActivity {
         cancel = (ImageView) findViewById(R.id.img_listorder_cancel);
         listOrder = (RecyclerView) findViewById(R.id.rcv_listOrder);
         support = (LinearLayout) findViewById(R.id.Linear_support_listorder);
-
+        search = (ImageView) findViewById(R.id.img_timkiem_donhang_user);
+        keysearch = (EditText) findViewById(R.id.et_search_donhang_user);
+        tieude = (TextView) findViewById(R.id.textView27);
     }
 }
