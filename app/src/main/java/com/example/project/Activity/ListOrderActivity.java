@@ -49,9 +49,9 @@ public class ListOrderActivity extends AppCompatActivity {
             if (ID.contains("-")) {
                 IdSearch = ID.split("-")[1];
                 ID = ID.split("-")[0];
-                tieude.setText("Đơn ngày " + IdSearch.substring(0, 2)
+                tieude.setText("Đơn ngày " + IdSearch.substring(4, 6)
                         + "/" + IdSearch.substring(2, 4)
-                        + "/20" + IdSearch.substring(4, 6));
+                        + "/20" + IdSearch.substring(0, 2));
             }
         }
         show();
@@ -71,24 +71,23 @@ public class ListOrderActivity extends AppCompatActivity {
                 String time = keysearch.getText().toString().trim();
                 if (!time.equals("")) {
                     if (time.contains("-")) {
-                        String[] tach = time.split("-");
-                        if (tach.length != 3) {
+                        if (time.split("-").length != 3) {
                             Toast.makeText(ListOrderActivity.this, "Nội dung tìm kiếm phải là Ngày-Tháng-Năm\nVD: 25-03-2021", Toast.LENGTH_SHORT).show();
                         } else {
-                            if (tach[2].length() != 4 || tach[1].length() > 2 || tach[0].length() > 2) {
+                            if (time.split("-")[2].length() != 4 || time.split("-")[1].length() > 2 || time.split("-")[0].length() > 2) {
                                 Toast.makeText(ListOrderActivity.this, "Nội dung tìm kiếm phải là Ngày-Tháng-Năm\nVD: 25-03-2021", Toast.LENGTH_SHORT).show();
                             } else {
                                 String iddonhang = "";
-                                if (tach[0].length() < 2)
-                                    iddonhang += "0" + tach[0];
+                                iddonhang += time.split("-")[2].substring(2);
+                                if (time.split("-")[1].length() < 2)
+                                    iddonhang += "0" + time.split("-")[1];
                                 else
-                                    iddonhang += tach[0];
+                                    iddonhang += time.split("-")[1];
+                                if (time.split("-")[0].length() < 2)
+                                    iddonhang += "0" + time.split("-")[0];
+                                else
+                                    iddonhang += time.split("-")[0];
 
-                                if (tach[1].length() < 2)
-                                    iddonhang += "0" + tach[1];
-                                else
-                                    iddonhang += tach[1];
-                                iddonhang += tach[2].substring(2);
                                 Intent intent = new Intent(ListOrderActivity.this, ListOrderActivity.class);
                                 intent.putExtra("idUser", ID + "-" + iddonhang);
                                 finish();
