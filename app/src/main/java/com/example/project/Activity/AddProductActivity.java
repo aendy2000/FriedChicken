@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,11 +50,14 @@ public class AddProductActivity extends AppCompatActivity {
     ImageView cancel, hinhanh;
     Button themhinhanh, luu;
     TextView tieude;
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
         matching();
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Đang tải, vui lòng chờ....");
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             maSP = bundle.getString("MaSanPham");
@@ -104,6 +108,7 @@ public class AddProductActivity extends AppCompatActivity {
                         mydialog.setPositiveButton("[THÊM]", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                dialog.show();
                                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -147,6 +152,7 @@ public class AddProductActivity extends AppCompatActivity {
 
                                                         Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
                                                         intent.putExtra("idData", "SanPham");
+                                                        dialog.dismiss();
                                                         finish();
                                                         startActivity(intent);
                                                     }
@@ -192,6 +198,7 @@ public class AddProductActivity extends AppCompatActivity {
                         mydialog.setPositiveButton("[LƯU]", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                dialog.show();
                                 reference.child(maSP).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -206,6 +213,7 @@ public class AddProductActivity extends AppCompatActivity {
 
                                             Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
                                             intent.putExtra("idData", "SanPham");
+                                            dialog.dismiss();
                                             finish();
                                             startActivity(intent);
                                         } else {
@@ -229,6 +237,7 @@ public class AddProductActivity extends AppCompatActivity {
 
                                                             Intent intent = new Intent(AddProductActivity.this, ProductManagerActivity.class);
                                                             intent.putExtra("idData", "SanPham");
+                                                            dialog.dismiss();
                                                             finish();
                                                             startActivity(intent);
                                                         }

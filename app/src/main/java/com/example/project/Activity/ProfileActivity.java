@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,12 +52,15 @@ public class ProfileActivity extends AppCompatActivity {
     FloatingActionButton btncart;
     Uri uri;
     private static final int MY_REQUEST_CODE = 100;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         matching();
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Đang tải, vui lòng chờ....");
         Bundle extras = getIntent().getExtras();
         ID = extras.getString("idProf");
         changPass();
@@ -301,6 +305,7 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
+                        dialog.show();
                         StorageReference khoAnh = FirebaseStorage.getInstance().getReference("Image-Upload");
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("TaiKhoan");
                         reference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -338,7 +343,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     reference.child(ID).child("DiaChi").setValue(diachi.getText().toString().trim());
                                     Toast.makeText(ProfileActivity.this, "Đã lưu chỉnh sửa", Toast.LENGTH_SHORT).show();
                                     load();
-
+                                    dialog.dismiss();
                                 } else {
                                     ContentResolver contentResolver = getContentResolver();
                                     MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
@@ -382,6 +387,7 @@ public class ProfileActivity extends AppCompatActivity {
                                                     reference.child(ID).child("HinhDaiDien").setValue(uri.toString());
                                                     Toast.makeText(ProfileActivity.this, "Đã lưu chỉnh sửa", Toast.LENGTH_SHORT).show();
                                                     load();
+                                                    dialog.dismiss();
                                                 }
                                             });
                                         }

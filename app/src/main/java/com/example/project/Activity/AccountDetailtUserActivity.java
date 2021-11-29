@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,12 +45,14 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
     TextView doimk;
     Uri uri;
     private static final int MY_REQUEST_CODE = 100;
-
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_detailt_user);
         matching();
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Đang tải, vui lòng chờ....");
         changepro.setVisibility(View.GONE);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -131,6 +134,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
+                            dialog.show();
                             StorageReference khoAnh = FirebaseStorage.getInstance().getReference("Image-Upload");
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("TaiKhoan");
                             reference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -182,7 +186,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                                         xoaAd.setText("XÓA");
 
                                         load();
-
+                                        dialog.dismiss();
                                     } else {
                                         ContentResolver contentResolver = getContentResolver();
                                         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
@@ -240,6 +244,7 @@ public class AccountDetailtUserActivity extends AppCompatActivity {
                                                         xoaAd.setText("XÓA");
 
                                                         load();
+                                                        dialog.dismiss();
                                                     }
                                                 });
                                             }

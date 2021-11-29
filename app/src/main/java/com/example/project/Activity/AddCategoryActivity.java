@@ -13,12 +13,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,12 +58,14 @@ public class AddCategoryActivity extends AppCompatActivity {
     Uri uri;
     String Madanhmuc, test = "";
     TextView tieude;
-
+    ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
         matching();
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Đang tải, vui lòng chờ....");
         Bundle bundle = getIntent().getExtras();
         Madanhmuc = bundle.getString("MaDanhMuc");
         if (Madanhmuc.equals("Add")) {
@@ -139,6 +143,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                                     mydialog.setPositiveButton("[THÊM]", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialog.show();
                                             int id = 0;
                                             for (DataSnapshot data : snapshot.getChildren()) {
                                                 id = Integer.valueOf(data.getKey().substring(data.getKey().indexOf("-") + 1));
@@ -174,6 +179,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
                                                             Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
                                                             intent.putExtra("idData", "DanhMuc");
+                                                            dialog.dismiss();
                                                             finish();
                                                             startActivity(intent);
                                                         }
@@ -226,6 +232,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                                         finish();
                                         startActivity(intent);
                                     } else {
+                                        dialog.show();
                                         ContentResolver contentResolver = getContentResolver();
                                         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
@@ -242,6 +249,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
                                                         Intent intent = new Intent(AddCategoryActivity.this, CategoryManagerActivity.class);
                                                         intent.putExtra("idData", "DanhMuc");
+                                                        dialog.dismiss();
                                                         finish();
                                                         startActivity(intent);
                                                     }
