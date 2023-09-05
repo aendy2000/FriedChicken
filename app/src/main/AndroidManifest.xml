@@ -26,13 +26,13 @@
             android:exported="true" />
         <activity
             android:name=".Activity.OrderDetailtOfCategoryManagerActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.OrderDetailtManagerActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.AddProductActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Activity.CartManagerDetailtActivity"
             android:exported="true" />
@@ -84,14 +84,16 @@
         <activity
             android:name=".Activity.DangkyActivity"
             android:exported="true" />
-        <activity android:name=".Activity.IntroActivity">
+        <activity android:name=".Activity.IntroActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.MainActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"
